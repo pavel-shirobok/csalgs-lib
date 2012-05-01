@@ -1,8 +1,4 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-<<<<<<< HEAD
-=======
-*.pdb
->>>>>>> 041817e8e6742aae6a95d2fd6b6c93d3ffcc15bf
 obj
 *.pdb
 # mstest test results
