@@ -1,6 +1,9 @@
 ﻿using System;
 namespace csalgs.math
 {
+	/// <summary>
+	/// Class presents of complex number and implements some methods to wirk with cimplex numbers
+	/// </summary>
 	public class Complex
 	{
 		private double _R;
@@ -77,40 +80,88 @@ namespace csalgs.math
 
 		}
 
+		/// <summary>
+		/// Override of + operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>summ of c1 and c2</returns>
 		public static Complex operator +(Complex c1, Complex c2) {
 			return c1.Clone().Append(c2);
 		}
 
+		/// <summary>
+		/// Override of + operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>summ of c1 and c2</returns>
 		public static Complex operator +(Complex c1, double c2)
 		{
 			return c1.Clone().Append(c2);
 		}
 
+		/// <summary>
+		/// Override of - operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>subtraction of c1 and c2</returns>
 		public static Complex operator -(Complex c1, Complex c2)
 		{
 			return c1.Clone().Subtract(c2);
 		}
 
+		/// <summary>
+		/// Override of - operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>subtraction of c1 and c2</returns>
 		public static Complex operator -(Complex c1, double c2)
 		{
 			return c1.Clone().Subtract(c2);
 		}
 
+		/// <summary>
+		/// Override of * operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>multyply of c1 and c2</returns>
 		public static Complex operator *(Complex c1, Complex c2)
 		{
 			return c1.Clone().Multiply(c2);
 		}
 
+		/// <summary>
+		/// Override of * operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>multiply of c1 and c2</returns>
 		public static Complex operator *(Complex c1, double c2)
 		{
 			return c1.Clone().Multiply(c2);
 		}
 
+		/// <summary>
+		/// Override of / operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>division of c1 and c2</returns>
 		public static Complex operator /(Complex c1, Complex c2)
 		{
 			return c1.Clone().Divide(c2);
 		}
 
+		/// <summary>
+		/// Override of / operator
+		/// </summary>
+		/// <param name="c1">left operand</param>
+		/// <param name="c2">right operand</param>
+		/// <returns>division of c1 and c2</returns>
 		public static Complex operator /(Complex c1, double c2)
 		{
 			return c1.Clone().Divide(c2);
@@ -240,6 +291,10 @@ namespace csalgs.math
 			return this;
 		}
 
+		/// <summary>
+		/// Represents instance of Complex as string
+		/// </summary>
+		/// <returns>String represents complex number</returns>
 		public override string ToString()
 		{
 			return "("+R.ToString()+", "+Im.ToString() +")";

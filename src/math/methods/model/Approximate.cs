@@ -30,9 +30,7 @@ namespace csalgs.math.model
 
 			RealMatrix resM = !A * B;
 
-			//This is old type of result List<double> result = resM.Columns[0].GetRawData();
-			
-			return null;
+			return new Polynomial(resM.GetColumnArray(0));
 		}
 
 	}

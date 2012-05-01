@@ -9,6 +9,11 @@
             System of linear equation
             </summary>
         </member>
+        <member name="T:csalgs.math.RealMatrix">
+            <summary>
+            Class represent matrix of real numbers
+            </summary>
+        </member>
         <member name="M:csalgs.math.RealMatrix.GetMatrix(System.Int32,System.Int32)">
             <summary>
             Create matrix rowCount*columnCount
@@ -188,14 +193,14 @@
         </member>
         <member name="M:csalgs.math.RealMatrix.GetColumnArray(System.Int32)">
             <summary>
-            Return <typeparamref name="double[]"/> array of column elements
+            Return double[] array of column elements
             </summary>
             <param name="index"></param>
             <returns></returns>
         </member>
         <member name="M:csalgs.math.RealMatrix.GetRowArray(System.Int32)">
             <summary>
-            Return <typeparamref name="double[]"/> array of row elements
+            Return double[] array of row elements
             </summary>
             <param name="index"></param>
             <returns></returns>

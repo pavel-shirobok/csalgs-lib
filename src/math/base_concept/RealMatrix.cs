@@ -2,6 +2,9 @@
 
 namespace csalgs.math
 {
+	/// <summary>
+	/// Class represent matrix of real numbers
+	/// </summary>
 	public class RealMatrix
 	{
 		#region static creators
@@ -110,8 +113,6 @@ namespace csalgs.math
 		private double[,] rawData;
 		private int rowCount;
 		private int columnCount;
-		
-		private IMatrixElementIterator xIterator;
 		#endregion
 		
 		/// <summary>
@@ -132,7 +133,7 @@ namespace csalgs.math
 				}
 			}
 
-			xIterator = new HorizontalIterator(rawData, rowCount, columnCount);
+			
 		}
 
 		#region elementary actions
@@ -448,14 +449,12 @@ namespace csalgs.math
 
 			get
 			{
-				xIterator.setCurrentIndex(row);
-				return xIterator[column];
+				return rawData[row, column];
 			}
 
 			set
 			{
-				xIterator.setCurrentIndex(row);
-				xIterator[column] = value;
+				rawData[row, column] = value;
 			}
 
 		}
@@ -480,22 +479,21 @@ namespace csalgs.math
 		}
 
 		/// <summary>
-		/// Return <typeparamref name="double[]"/> array of column elements
+		/// Return double[] array of column elements
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
 		public double[] GetColumnArray(int index) {
 			double[] result = new double[rowCount];
 			for (int i = 0; i < rowCount; i++) {
-				xIterator.setCurrentIndex(i);
-				result[i] = xIterator[index];
+				result[i] = this[i, index];
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		/// Return <typeparamref name="double[]"/> array of row elements
+		/// Return double[] array of row elements
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
@@ -505,81 +503,13 @@ namespace csalgs.math
 
 			for (int i = 0; i < columnCount; i++)
 			{
-				xIterator.setCurrentIndex(index);
-				result[i] = xIterator[i];
+				result[i] = this[index, i];
 			}
 
 			return result;
 		}
 		#endregion
 
-		#region private classes
-		
-		/// <summary>
-		/// Iterator class for row elements
-		/// </summary>
-		private class HorizontalIterator : IMatrixElementIterator
-		{
-			private double[,] rawData;
-			private int rows;
-			private int columns;
-			private int index;
-
-			public HorizontalIterator(double[,] rawData, int rws, int clms)
-			{
-				this.rawData = rawData;
-				this.rows = rws;
-				this.columns = clms;
-				index = 0;
-			}
-
-			/// <summary>
-			/// Setting current index of rows
-			/// </summary>
-			/// <param name="index"></param>
-			public void setCurrentIndex(int index)
-			{
-				if (index < 0 || index > this.rows - 1) 
-				{
-					throw new ArgumentOutOfRangeException("index out of range");
-				}
-
-				this.index = index;
-			}
-			
-			/// <summary>
-			/// Indexator for row elements by column's index
-			/// </summary>
-			/// <param name="column_index"></param>
-			/// <returns></returns>
-			public double this[int column_index]
-			{
-				get
-				{
-					return rawData[index, column_index];
-				}
-				set
-				{
-					rawData[index, column_index] = value;
-				}
-			}
-
-		}
-
-		/// <summary>
-		/// Interface for matrix elements iterator
-		/// </summary>
-		private interface IMatrixElementIterator
-		{
-			void setCurrentIndex(int index);
-
-			double this[int index]
-			{
-				get;
-				set;
-			}
-		}
-		#endregion
 	}
 
 }
