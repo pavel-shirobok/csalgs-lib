@@ -1,0 +1,392 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>csalgs-lib</name>
+    </assembly>
+    <members>
+        <member name="T:csalgs.math.linear.ISLE">
+            <summary>
+            System of linear equation
+            </summary>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetMatrix(System.Int32,System.Int32)">
+            <summary>
+            Create matrix rowCount*columnCount
+            </summary>
+            <param name="rowCount">count of rows</param>
+            <param name="columnCount">count of columns</param>
+            <returns>instance of new matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetQuadroMatrix(System.Int32)">
+            <summary>
+            Create new square matrix
+            </summary>
+            <param name="size">size of new square matrix</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_Addition(csalgs.math.RealMatrix,csalgs.math.RealMatrix)">
+            <summary>
+            Appends two matrix
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns>new matrix equals summ of m1 and m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_Subtraction(csalgs.math.RealMatrix,csalgs.math.RealMatrix)">
+            <summary>
+            Subtract two matrix
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns>new matrix equals subtract between m1 and m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_Multiply(csalgs.math.RealMatrix,csalgs.math.RealMatrix)">
+            <summary>
+            Multiply two matrix
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns>new matrix equals multiply m1 and m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_Multiply(csalgs.math.RealMatrix,System.Double)">
+            <summary>
+            Multiply matrix and number
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns>new matrix equals myltiply m1 and m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_Division(csalgs.math.RealMatrix,System.Double)">
+            <summary>
+            Divide matrix and number
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns>new matrix equals divide m1 and m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_LogicalNot(csalgs.math.RealMatrix)">
+            <summary>
+            Get inverse matrix
+            </summary>
+            <param name="m1"></param>
+            <returns>new inverse matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.op_OnesComplement(csalgs.math.RealMatrix)">
+            <summary>
+            Get transpose matrix
+            </summary>
+            <param name="m1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor for matrix rows*columns
+            </summary>
+            <param name="rows"></param>
+            <param name="columns"></param>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.isEqual(csalgs.math.RealMatrix)">
+            <summary>
+            Check equal of current matrix and <paramref name="m"/>
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Append(csalgs.math.RealMatrix)">
+            <summary>
+            Append matrix
+            </summary>
+            <param name="mtx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Subtract(csalgs.math.RealMatrix)">
+            <summary>
+            Subtract matrix
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Multiply(System.Double)">
+            <summary>
+            Multiply by number
+            </summary>
+            <param name="number"></param>
+            <returns>current matrix multiplied by number</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Multiply(csalgs.math.RealMatrix)">
+            <summary>
+            Multiply by matrix
+            </summary>
+            <param name="m2"></param>
+            <returns>new matrix equals this*m2</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Divide(System.Double)">
+            <summary>
+            Divide by number
+            </summary>
+            <param name="number"></param>
+            <returns>current matrix divided by number</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.ChangeRowsPosition(System.Int32,System.Int32)">
+            <summary>
+            Change row's position
+            </summary>
+            <param name="index">row's index </param>
+            <param name="target">index of target position</param>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.ChangeColumnsPosition(System.Int32,System.Int32)">
+            <summary>
+            Change column's position
+            </summary>
+            <param name="index">column's index </param>
+            <param name="target">index of target position</param>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Transpose">
+            <summary>
+            Transose matrix
+            </summary>
+            <returns>new matrix result of transosing current matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetMinor(System.Int32,System.Int32)">
+            <summary>
+            Get minor matrix
+            </summary>
+            <param name="rowIndex"></param>
+            <param name="columnIndex"></param>
+            <returns>minor matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetUnion">
+            <summary>
+            Get union matrix
+            </summary>
+            <returns>union matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetInverse">
+            <summary>
+            Get inverse matrix
+            </summary>
+            <returns>inverse matrix</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.RecursiveDetirminant">
+            <summary>
+            Detirminant. Recursive method(too slow for size>10)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.IsSizeEqual(csalgs.math.RealMatrix)">
+            <summary>
+            Check for size equals between this and <paramref name="matrix"/>
+            </summary>
+            <param name="matrix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.Clone">
+            <summary>
+            Clone current matrix
+            </summary>
+            <returns>clone</returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetColumnArray(System.Int32)">
+            <summary>
+            Return <typeparamref name="double[]"/> array of column elements
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.GetRowArray(System.Int32)">
+            <summary>
+            Return <typeparamref name="double[]"/> array of row elements
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:csalgs.math.RealMatrix.RowCount">
+            <summary>
+            Count of rows
+            </summary>
+        </member>
+        <member name="P:csalgs.math.RealMatrix.ColumnCount">
+            <summary>
+            Count of columns
+            </summary>
+        </member>
+        <member name="P:csalgs.math.RealMatrix.Item(System.Int32,System.Int32)">
+            <summary>
+            Indexator for matrix elements
+            </summary>
+            <param name="row"></param>
+            <param name="column"></param>
+            <returns>matrix element</returns>
+        </member>
+        <member name="T:csalgs.math.RealMatrix.HorizontalIterator">
+            <summary>
+            Iterator class for row elements
+            </summary>
+        </member>
+        <member name="T:csalgs.math.RealMatrix.IMatrixElementIterator">
+            <summary>
+            Interface for matrix elements iterator
+            </summary>
+        </member>
+        <member name="M:csalgs.math.RealMatrix.HorizontalIterator.setCurrentIndex(System.Int32)">
+            <summary>
+            Setting current index of rows
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="P:csalgs.math.RealMatrix.HorizontalIterator.Item(System.Int32)">
+            <summary>
+            Indexator for row elements by column's index
+            </summary>
+            <param name="column_index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetMeanValue(System.Double[])">
+            <summary>
+            Get mean value
+            </summary>
+            <param name="data">selection</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetDispersionValue(System.Double[],System.Double)">
+            <summary>
+            Get dispersion value
+            </summary>
+            <param name="data">selection</param>
+            <param name="meanValue">mean value</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetDispersionValue(System.Double[])">
+            <summary>
+            Get dispersion value
+            </summary>
+            <param name="data">selection</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetCovarianceValue(System.Double[],System.Double[])">
+            <summary>
+            Get value of covatiance
+            </summary>
+            <param name="dataX">first selection</param>
+            <param name="dataY">second selection</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetCorrelationValue(System.Double[],System.Double[])">
+            <summary>
+            Get value of correlation
+            </summary>
+            <param name="dataOne">first selection</param>
+            <param name="dataTwo">second selection</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.stat.Statistics.GetPairCorrelationsMatrix(csalgs.math.RealMatrix)">
+            <summary>
+            Get matrix with pair correlation values
+            </summary>
+            <param name="matrix">matrix with selections</param>
+            <returns></returns>
+        </member>
+        <member name="T:csalgs.math.stat.IPDV">
+            <summary>
+            Probability density value - оценка плотности вероятности
+            </summary>
+        </member>
+        <member name="M:csalgs.math.Complex.#ctor(System.Double)">
+            <summary>
+            Constructor Real = <paramref name="r"/> Imaginary = 1
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:csalgs.math.Complex.#ctor(System.Double,System.Double)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="r">real part</param>
+            <param name="im">imaginary part</param>
+        </member>
+        <member name="M:csalgs.math.Complex.#ctor">
+            <summary>
+            Constructor Real = 0 Imaginary = 1
+            </summary>
+        </member>
+        <member name="M:csalgs.math.Complex.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns>clone o current number</returns>
+        </member>
+        <member name="M:csalgs.math.Complex.FromExp(System.Double)">
+            <summary>
+            Generate complex number from exponent power
+            </summary>
+            <param name="pe">power of exponent</param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Append(csalgs.math.Complex)">
+            <summary>
+            Append complex number
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Append(System.Double)">
+            <summary>
+            Append
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Subtract(csalgs.math.Complex)">
+            <summary>
+            Subtract complex number
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Subtract(System.Double)">
+            <summary>
+            Subtact
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Multiply(csalgs.math.Complex)">
+            <summary>
+            Multiply
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Multiply(System.Double)">
+            <summary>
+            Multiply
+            </summary>
+            <param name="d"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Divide(System.Double)">
+            <summary>
+            Divide
+            </summary>
+            <param name="d"></param>
+            <returns></returns>
+        </member>
+        <member name="M:csalgs.math.Complex.Divide(csalgs.math.Complex)">
+            <summary>
+            Divide
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="P:csalgs.math.Complex.R">
+            <summary>
+            Real part of number
+            </summary>
+        </member>
+        <member name="P:csalgs.math.Complex.Im">
+            <summary>
+            Imaginary part of part
+            </summary>
+        </member>
+    </members>
+</doc>
