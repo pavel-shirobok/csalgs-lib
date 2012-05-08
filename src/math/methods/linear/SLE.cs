@@ -1,5 +1,5 @@
 ﻿using System;
-namespace csalgs.math.linear
+namespace csalgs.math
 {
 	/// <summary>
 	/// System of linear equation

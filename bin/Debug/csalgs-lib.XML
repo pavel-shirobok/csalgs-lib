@@ -4,7 +4,7 @@
         <name>csalgs-lib</name>
     </assembly>
     <members>
-        <member name="T:csalgs.math.linear.ISLE">
+        <member name="T:csalgs.math.ISLE">
             <summary>
             System of linear equation
             </summary>
@@ -90,7 +90,7 @@
             <param name="rows"></param>
             <param name="columns"></param>
         </member>
-        <member name="M:csalgs.math.RealMatrix.isEqual(csalgs.math.RealMatrix)">
+        <member name="M:csalgs.math.RealMatrix.IsEqual(csalgs.math.RealMatrix)">
             <summary>
             Check equal of current matrix and <paramref name="m"/>
             </summary>

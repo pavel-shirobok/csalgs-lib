@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace csalgs.math.model
+namespace csalgs.math
 {
 	public interface IApproximator {
 		Polynomial Approximate(ISelection XY, int order);	
@@ -14,9 +14,13 @@ namespace csalgs.math.model
 			RealMatrix A = new RealMatrix(order, order);
 			RealMatrix B = new RealMatrix(order, 1);
 
-			for (int i = 0; i < order; i++) {
-				for (int j = 0; j < order; j++) {
-					for(int k=0; k < XY.Size; k++){
+			for (int i = 0; i < order; i++)
+			{
+				for (int j = 0; j < order; j++)
+				{
+					for (int k = 0; k < XY.Size; k++)
+					{
+						
 						A[i, j] += Math.Pow(XY[k][0], i) * Math.Pow(XY[k][0], j);
 					}
 				}
@@ -24,13 +28,14 @@ namespace csalgs.math.model
 
 			for (int i = 0; i < order; i++) {
 				for(int k=0; k < XY.Size; k++){
-					B[i, 0] += Math.Pow(XY[k][0], i) * XY[k][0];
+					B[i, 0] += Math.Pow(XY[k][0], i) * XY[k][1];
 				}
 			}
 
-			RealMatrix resM = !A * B;
-
-			return new Polynomial(resM.GetColumnArray(0));
+			ISLE sle = new SLEGausse();
+			return new Polynomial(sle.Solve(A, B));
+			//RealMatrix resM = A.GetInverse().Multiply(B);// !A * B;
+			//return new Polynomial(resM.GetColumnArray(0));
 		}
 
 	}

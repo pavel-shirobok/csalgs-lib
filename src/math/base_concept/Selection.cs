@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace csalgs.math
 {
-	public interface ISelection {
+	public interface ISelection:IEnumerable<IVector> {
 		IVector this[int index]
 		{
 			get;
@@ -104,6 +105,16 @@ namespace csalgs.math
 		public int Size
 		{
 			get { return selection.Count; }
+		}
+
+		public IEnumerator<IVector> GetEnumerator()
+		{
+			return selection.GetEnumerator();
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return selection.GetEnumerator();
 		}
 	}
 

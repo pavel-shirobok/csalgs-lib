@@ -42,7 +42,7 @@ namespace csalgs.math
 
 		public double Length {
 			get {
-				return max - min;
+				return Max - Min;
 			}
 		}
 

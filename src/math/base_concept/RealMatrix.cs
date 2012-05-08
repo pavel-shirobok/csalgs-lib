@@ -28,6 +28,24 @@ namespace csalgs.math
 			return new RealMatrix(size, size);
 		}
 
+
+		public static RealMatrix GetRandomMatrix(int sizeOfQuadroMatrix, IRDL rdl)
+		{
+			return GetRandomMatrix(sizeOfQuadroMatrix, sizeOfQuadroMatrix, rdl);
+		}
+
+		public static RealMatrix GetRandomMatrix(int rowsCount, int columnsCount, IRDL rdl) {
+			RealMatrix result = new RealMatrix(rowsCount, columnsCount);
+
+			for (int i = 0; i < rowsCount; i++) {
+				for(int j = 0; j < columnsCount; j++) {
+					result[i, j] = rdl.Get();
+				}
+			}
+
+			return result;
+		}
+
 		#endregion
 
 		#region operators
@@ -143,7 +161,7 @@ namespace csalgs.math
 		/// </summary>
 		/// <param name="m"></param>
 		/// <returns></returns>
-		public bool isEqual(RealMatrix m)
+		public bool IsEqual(RealMatrix m)
 		{
 			if (m == null) return false;
 			if (!IsSizeEqual(m)) return false;
@@ -158,6 +176,26 @@ namespace csalgs.math
 
 			return true;
 		}
+
+		public bool IsIdentityMatrix() {
+			for (int i = 0; i < rowCount; i++)
+			{
+				for (int j = 0; j < columnCount; j++)
+				{
+
+					if (i == j)
+					{
+						if (this[i, j] != 1) return false;
+					}
+					else {
+						if (this[i, j] != 0) return false;
+					}
+
+				}
+			}
+			return true;
+		}
+
 
 		/// <summary>
 		/// Append matrix
@@ -300,11 +338,11 @@ namespace csalgs.math
 		/// </summary>
 		/// <returns>new matrix result of transosing current matrix</returns>
 		public RealMatrix Transpose() {
-			RealMatrix result = RealMatrix.GetMatrix(RowCount, ColumnCount);
+			RealMatrix result = RealMatrix.GetMatrix(ColumnCount, RowCount);
 
-			for (int i = 0; i < RowCount; i++)
+			for (int i = 0; i < result.RowCount; i++)
 			{
-				for (int j = 0; j < ColumnCount; j++)
+				for (int j = 0; j < result.ColumnCount; j++)
 				{
 					result[i, j] = this[j, i];
 				}
@@ -509,7 +547,6 @@ namespace csalgs.math
 			return result;
 		}
 		#endregion
-
 	}
 
 }

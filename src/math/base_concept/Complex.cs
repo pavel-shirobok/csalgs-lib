@@ -267,7 +267,7 @@ namespace csalgs.math
 
 			R = newR;
 			Im = newIm;
-
+			
 			return this;
 		}
 
