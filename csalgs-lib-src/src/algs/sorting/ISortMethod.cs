@@ -5,9 +5,9 @@ using System.Text;
 namespace csalgs.sorting
 {
     public interface ISortMethod<T>{
-        void Setup(IEnumerable<T> selection);
+        void Setup(T[] selection);
         void SetupComparable(Comparison<T> comparison);
-
+        
         void Sort();
 
         void NextStep();
@@ -22,7 +22,7 @@ namespace csalgs.sorting
             get;
         }
 
-        int Index
+        int ItemIndex
         {
             get;
         }

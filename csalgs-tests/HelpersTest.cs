@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using csalgs.sorting;
+
 namespace csalgs_tests
 {
     [TestClass]
@@ -12,7 +13,7 @@ namespace csalgs_tests
         [TestMethod]
         public void TestDoubleGenerating()
         {
-            Double[] selection = Helpers.GenerateDoubleSelection(10);
+            Double[] selection = SortHelper.GenerateDoubleSelection(10);
             Assert.AreEqual(10, selection.Length);
         }
 
@@ -21,7 +22,7 @@ namespace csalgs_tests
             Exception ex = null;
             
             try{
-                Helpers.GenerateDoubleSelection(0);
+                SortHelper.GenerateDoubleSelection(0);
             }catch(Exception e){
                 ex = e;
             }
@@ -30,7 +31,7 @@ namespace csalgs_tests
 
             try
             {
-                Helpers.GenerateDoubleSelection(-1);
+                SortHelper.GenerateDoubleSelection(-1);
             }
             catch (Exception e)
             {
@@ -43,11 +44,18 @@ namespace csalgs_tests
 
         [TestMethod]
         public void TestResultSorting() {
+            
             Double[] result = {1.0, 2.0, 3.0, 4.0, 5.0}; 
-            Comparison<Double> comp = Comparisons.DOUBLE_ASC;
+            Assert.AreEqual(true, SortHelper.TestSorting<Double>(result, Comparisons.DOUBLE_ASC));
+            Assert.AreEqual(false, SortHelper.TestSorting<Double>(result, Comparisons.DOUBLE_DESC));
 
-            
-            
+            Double[] result2 = {0.0, 0, 1.0, 10.0, -10.0};
+            Assert.AreEqual(false, SortHelper.TestSorting<Double>(result2, Comparisons.DOUBLE_ASC));
+            Assert.AreEqual(false, SortHelper.TestSorting<Double>(result2, Comparisons.DOUBLE_DESC));
+
+            Double[] result3 = { 10, 9, 8, 6, 0 };
+            Assert.AreEqual(false, SortHelper.TestSorting<Double>(result3, Comparisons.DOUBLE_ASC));
+            Assert.AreEqual(true, SortHelper.TestSorting<Double>(result3, Comparisons.DOUBLE_DESC));
         }
     }
 }

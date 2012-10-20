@@ -6,34 +6,47 @@ namespace csalgs.sorting
 {
     abstract public class AbstractSortMethod<T>:ISortMethod<T>
     {
-        protected IEnumerable<T> selection;
+        protected T[] selection;
         protected Comparison<T> comparison;
+        protected int currentStepIndex;
+        protected int currentItemIndex = 0;
 
-        public void Setup(IEnumerable<T> selection)
+        public void Setup(T[] selection)
         {
             if (null == selection) throw new ArgumentNullException("selection must be non-null");
             this.selection = selection;
+            reset();
         }
 
         public void SetupComparable(Comparison<T> comparison)
         {
             if (null == comparison) throw new ArgumentNullException("comparison functions must be non-null");
             this.comparison = comparison;
+            reset();
         }
 
-        public void Sort()
+        protected void reset() {
+            currentStepIndex = 0;
+            currentItemIndex = 0;
+        }
+
+        protected void increaseItemIndex() {
+            currentItemIndex++;
+        }
+
+        public virtual void Sort()
         {
             throw new NotImplementedException();
         }
 
         public int StepIndex
         {
-            get { throw new NotImplementedException(); }
+            get { return currentStepIndex; }
         }
 
-        public int Index
+        public int ItemIndex
         {
-            get { throw new NotImplementedException(); }
+            get { return currentItemIndex; }
         }
         
         abstract public void  NextStep();

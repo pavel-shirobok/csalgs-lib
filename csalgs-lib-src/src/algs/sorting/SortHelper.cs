@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using csalgs.math;
-namespace csalgs_tests
+namespace csalgs.sorting
 {
-    class Helpers
+    public class SortHelper
     {
 
         public static Double[] GenerateDoubleSelection(int count) {
@@ -20,10 +19,21 @@ namespace csalgs_tests
         }
 
         public static Boolean TestSorting<T>(IEnumerable<T> selection, Comparison<T> comparison){
-            
+            T prev = default(T);
+
+            foreach(T value  in selection) {
+                if (default(T).Equals(prev))
+                {
+                    prev = value;
+                    continue;
+                }
+
+                if(comparison(value, prev)==-1)return false;
+                prev = value;
+            } 
 
 
-            return false;
+            return true;
         }
 
     }

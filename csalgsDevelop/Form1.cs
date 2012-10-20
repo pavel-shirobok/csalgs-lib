@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using csalgs.math;
+using csalgs.sorting;
 
 namespace csalgsDevelop
 {
@@ -18,7 +19,7 @@ namespace csalgsDevelop
 			InitializeComponent();
 
 			Range ra = new Range(1, 2);
-
+            sortChart.Series.Add("12");
 			//ra.
 		}
 
@@ -189,7 +190,53 @@ namespace csalgsDevelop
 
 		#endregion
 
+        
+
+        #region Sorting
+
+        private ISortMethod<Double> method = new BubbleSort<Double>();
+        private double[] selection;
+        private void startSorting_Click(object sender, EventArgs e)
+        {
+            if (_sortingTimer.Enabled) return;
+            _sortingTimer.Start();
 
 
-	}
+            int N = 40;
+
+            selection = SortHelper.GenerateDoubleSelection(N);
+            method.Setup(selection);
+            method.SetupComparable(Comparisons.DOUBLE_ASC);
+
+            drawSortingChart(method, selection);
+        }
+
+        private void drawSortingChart(ISortMethod<double> method, double[] selection)
+        {
+            sortChart.Series[0].Points.Clear();
+            for(int i =0; i<selection.Length; i++){
+                sortChart.Series[0].Points.AddY(selection[i]);
+                if (i == method.ItemIndex) {
+                    sortChart.Series[0].Points[i].Color = Color.Red;
+                }
+            }
+            
+        }
+
+        private void onSortTimerTick(object sender, EventArgs e)
+        {
+            if (method.Finished) {
+                _sortingTimer.Stop();
+                return;
+            }
+            
+            method.NextStep();
+            drawSortingChart(method, selection);
+        }
+
+        #endregion
+
+        
+
+    }
 }

@@ -16,15 +16,21 @@ namespace csalgs_tests
         }
 
         [TestMethod]
-        public void TestFullSortingDouble() {
+        public void TestFullBubbleSortingDouble() {
             ISortMethod<Double> sort = new BubbleSort<Double>();
-            Double[] selection = Helpers.GenerateDoubleSelection(10);
+            Double[] selection = SortHelper.GenerateDoubleSelection(100);
 
-            sort.Setup(selection);
-            sort.SetupComparable(Comparisons.DOUBLE_ASC);
-
-            sort.Sort();
-
+            testMethod<Double>(sort, selection, Comparisons.DOUBLE_ASC);
+            testMethod<Double>(sort, selection, Comparisons.DOUBLE_DESC);
         }
+
+        private void testMethod<T>(ISortMethod<T> method, T[] selection, Comparison<T> comp) {
+            method.Setup(selection);
+            method.SetupComparable(comp);
+            method.Sort();
+            Assert.AreEqual(true, SortHelper.TestSorting<T>(selection, comp));
+        }
+
+
     }
 }
