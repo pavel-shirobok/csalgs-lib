@@ -9,9 +9,10 @@ namespace csalgs.sorting
         protected T[] selection;
         protected Comparison<T> comparison;
         protected int currentStepIndex;
-        protected int currentItemIndex = 0;
+        protected int currentPrimaryItemIndex = 0;
+        protected int currentSecondaryItemIndex = 0;
 
-        public void Setup(T[] selection)
+        public virtual void Setup(T[] selection)
         {
             if (null == selection) throw new ArgumentNullException("selection must be non-null");
             this.selection = selection;
@@ -25,18 +26,19 @@ namespace csalgs.sorting
             reset();
         }
 
-        protected void reset() {
+        protected virtual void reset() {
             currentStepIndex = 0;
-            currentItemIndex = 0;
+            currentPrimaryItemIndex = -1;
+            currentSecondaryItemIndex = -1;
         }
 
         protected void increaseItemIndex() {
-            currentItemIndex++;
+            currentPrimaryItemIndex++;
         }
 
         public virtual void Sort()
         {
-            throw new NotImplementedException();
+            while (!Finished) NextStep();
         }
 
         public int StepIndex
@@ -44,9 +46,9 @@ namespace csalgs.sorting
             get { return currentStepIndex; }
         }
 
-        public int ItemIndex
+        public int PrimaryItemIndex
         {
-            get { return currentItemIndex; }
+            get { return currentPrimaryItemIndex; }
         }
         
         abstract public void  NextStep();
@@ -54,6 +56,12 @@ namespace csalgs.sorting
         abstract public bool Finished
         {
             get;
+        }
+
+
+        public int SecondaryItemIndex
+        {
+            get { return currentSecondaryItemIndex; }
         }
     }
 }

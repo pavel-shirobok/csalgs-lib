@@ -202,7 +202,7 @@ namespace csalgsDevelop
             _sortingTimer.Start();
 
 
-            int N = 40;
+            int N = 50;
 
             selection = SortHelper.GenerateDoubleSelection(N);
             method.Setup(selection);
@@ -216,8 +216,13 @@ namespace csalgsDevelop
             sortChart.Series[0].Points.Clear();
             for(int i =0; i<selection.Length; i++){
                 sortChart.Series[0].Points.AddY(selection[i]);
-                if (i == method.ItemIndex) {
+                if (i == method.PrimaryItemIndex) {
                     sortChart.Series[0].Points[i].Color = Color.Red;
+                }
+
+                if (i == method.SecondaryItemIndex)
+                {
+                    sortChart.Series[0].Points[i].Color = Color.Green;
                 }
             }
             

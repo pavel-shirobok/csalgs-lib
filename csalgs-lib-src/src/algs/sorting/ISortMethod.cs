@@ -22,7 +22,12 @@ namespace csalgs.sorting
             get;
         }
 
-        int ItemIndex
+        int PrimaryItemIndex
+        {
+            get;
+        }
+
+        int SecondaryItemIndex
         {
             get;
         }

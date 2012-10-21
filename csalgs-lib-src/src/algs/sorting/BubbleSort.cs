@@ -8,36 +8,46 @@ namespace csalgs.sorting
     {
         private Boolean whasChanged = true;
         private T current;
-        public override void Sort()
-        {
-            current = selection[0];
+        private int lightIndex;
 
-            while (!Finished) NextStep();
+        protected override void reset()
+        {
+            base.reset();
+            lightIndex = -1;
         }
 
         public override void NextStep()
         {
-            current = selection[currentItemIndex];
+            if (lightIndex == -1) {
+                lightIndex = selection.Length;
+                currentPrimaryItemIndex = 0;
+                current = selection[0];
+            }
+
+            current = selection[currentPrimaryItemIndex];
             increaseItemIndex();
 
-            if(currentItemIndex == selection.Length){
-                currentItemIndex = 0;
-                current = selection[currentItemIndex];
+            if(currentPrimaryItemIndex == lightIndex){
+                currentPrimaryItemIndex = 0;
+                current = selection[currentPrimaryItemIndex];
                 increaseItemIndex();
+                lightIndex--;
             }
             
-            T next = selection[currentItemIndex];
+            T next = selection[currentPrimaryItemIndex];
 
             if (comparison(current, next) == 1) {
-                selection[currentItemIndex] = current;
-                selection[currentItemIndex-1] = next;
+                currentSecondaryItemIndex = currentPrimaryItemIndex - 1;
+                selection[currentPrimaryItemIndex] = current;
+                selection[currentSecondaryItemIndex] = next;
             }
+
             currentStepIndex++;
         }
 
         public override bool Finished
         {
-            get { return SortHelper.TestSorting<T>(selection, comparison); }
+            get { return lightIndex==1; }
         }
     }
 }

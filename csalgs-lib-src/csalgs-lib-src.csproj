@@ -39,6 +39,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\algs\sorting\AbstractSortMethod.cs" />
     <Compile Include="src\algs\sorting\BubbleSort.cs" />
+    <Compile Include="src\algs\sorting\QuickSort.cs" />
     <Compile Include="src\algs\sorting\SortHelper.cs" />
     <Compile Include="src\algs\sorting\ISortMethod.cs" />
     <Compile Include="src\math\base_concept\Complex.cs" />
