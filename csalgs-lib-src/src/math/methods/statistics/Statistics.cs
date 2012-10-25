@@ -108,12 +108,12 @@ namespace csalgs.math.stat
 		/// </summary>
 		/// <param name="matrix">matrix with selections</param>
 		/// <returns></returns>
-		public static RealMatrix GetPairCorrelationsMatrix(RealMatrix matrix)
+		public static Matrix GetPairCorrelationsMatrix(Matrix matrix)
 		{
-			int N = matrix.ColumnCount;
+			int N = matrix.ColumnsCount;
 			int i, j;
 
-			RealMatrix result = new RealMatrix(N, N);
+			Matrix result = new Matrix(N, N);
 
 			for (i = 0; i < N; i++)
 			{

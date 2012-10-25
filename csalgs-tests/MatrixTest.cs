@@ -52,7 +52,7 @@ namespace csalgs_tests
 			raw[2, 1] = 6;
 
 
-			RealMatrix matrix1 = new RealMatrix(3, 2);
+			Matrix matrix1 = new Matrix(3, 2);
 
 			matrix1[0, 0] = 1;
 			matrix1[0, 1] = 2;
@@ -76,13 +76,13 @@ namespace csalgs_tests
 		public void MatrixPlusTest() {
 			IRDL rdl = new UniformRDL();
 
-			RealMatrix m1 = RealMatrix.GetRandomMatrix(3, rdl);
-			RealMatrix m2 = RealMatrix.GetRandomMatrix(3, rdl);
+			Matrix m1 = Matrix.GetRandomMatrix(3, rdl);
+			Matrix m2 = Matrix.GetRandomMatrix(3, rdl);
 
-			RealMatrix rm = m1 - m2;
+			Matrix rm = m1 - m2;
 
-			for (int i = 0; i < rm.RowCount; i++) {
-				for (int j = 0; j < rm.ColumnCount; j++) {
+			for (int i = 0; i < rm.RowsCount; i++) {
+				for (int j = 0; j < rm.ColumnsCount; j++) {
 					if (rm[i, j] != m1[i, j] - m2[i, j]) Assert.Fail("Fail ", i, j);
 				}
 			}
@@ -91,10 +91,10 @@ namespace csalgs_tests
 		[TestMethod]
 		public void MatrixTransposeTest() {
 			IRDL rdl = new UniformRDL();
-			RealMatrix matrix = RealMatrix.GetRandomMatrix(2, 3, rdl);
+			Matrix matrix = Matrix.GetRandomMatrix(2, 3, rdl);
 
-			RealMatrix tr = ~matrix;
-			RealMatrix tr2 = ~tr;
+			Matrix tr = ~matrix;
+			Matrix tr2 = ~tr;
 
 			Assert.AreEqual(true, tr2.IsEqual(matrix));
 		}
@@ -102,16 +102,16 @@ namespace csalgs_tests
 		[TestMethod]
 		public void MatrixInverseTest() {
 			IRDL rdl = new UniformRDL();
-			RealMatrix matrix = RealMatrix.GetRandomMatrix(3, 3, rdl);
+			Matrix matrix = Matrix.GetRandomMatrix(3, 3, rdl);
 
-			RealMatrix inversed = !matrix;
+			Matrix inversed = !matrix;
 			//RealMatrix inversed2 = !inversed;
-			RealMatrix identity = inversed * matrix;
+			Matrix identity = inversed * matrix;
 
-			for (int i = 0; i < identity.RowCount; i++)
+			for (int i = 0; i < identity.RowsCount; i++)
 			{
 				Console.WriteLine();
-				for (int j = 0; j < identity.ColumnCount; j++)
+				for (int j = 0; j < identity.ColumnsCount; j++)
 				{
 
 					Console.Write(identity[i, j] + " ");

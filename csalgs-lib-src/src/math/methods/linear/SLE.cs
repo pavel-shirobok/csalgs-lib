@@ -5,18 +5,18 @@ namespace csalgs.math
 	/// System of linear equation
 	/// </summary>
 	public interface ISLE {
-		IVector Solve(RealMatrix A, RealMatrix B);
+		IVector Solve(Matrix A, Matrix B);
 	}
 
 	public class SLEGausse : ISLE {
 
-		public IVector Solve(RealMatrix _A, RealMatrix _B)
+		public IVector Solve(Matrix _A, Matrix _B)
 		{
 			int i = 0, j, k;
-			int N = (int)_A.RowCount;
+			int N = (int)_A.RowsCount;
 
-			RealMatrix A = _A.Clone();
-			RealMatrix B = _B.Clone();
+			Matrix A = _A.Clone();
+			Matrix B = _B.Clone();
 
 			N--;
 			for (i = 0; i < N - 1; i++)
@@ -55,7 +55,7 @@ namespace csalgs.math
 
 	public class SLEMatrix : ISLE {
 
-		public IVector Solve(RealMatrix A, RealMatrix B)
+		public IVector Solve(Matrix A, Matrix B)
 		{
 			return new Vector((!A * B).GetColumnArray(0));
 		}

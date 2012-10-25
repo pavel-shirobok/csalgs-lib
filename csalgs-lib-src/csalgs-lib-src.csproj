@@ -44,20 +44,27 @@
     <Compile Include="src\algs\sorting\ISortMethod.cs" />
     <Compile Include="src\math\base_concept\Complex.cs" />
     <Compile Include="src\math\base_concept\Kernel.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.NonSimpleActions.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.Statics.cs" />
     <Compile Include="src\math\base_concept\Polynomial.cs" />
     <Compile Include="src\math\base_concept\Range.cs" />
     <Compile Include="src\math\base_concept\RDL.cs" />
-    <Compile Include="src\math\base_concept\RealMatrix.cs" />
     <Compile Include="src\math\base_concept\Selection.cs" />
     <Compile Include="src\math\base_concept\Vector.cs" />
     <Compile Include="src\math\base_concept\Wave.cs" />
     <Compile Include="src\math\MathUtils.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.Actions.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.Assert.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.Comparing.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.cs" />
+    <Compile Include="src\math\base_concept\matrix\Matrix.Operators.cs" />
     <Compile Include="src\math\methods\linear\SLE.cs" />
     <Compile Include="src\math\methods\model\Approximate.cs" />
     <Compile Include="src\math\methods\statistics\PDV.cs" />
     <Compile Include="src\math\methods\statistics\Statistics.cs" />
     <Compile Include="src\math\methods\transform\Fourier.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

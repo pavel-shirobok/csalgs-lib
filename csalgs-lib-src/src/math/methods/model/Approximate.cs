@@ -11,8 +11,8 @@ namespace csalgs.math
 	public class LeastSquareMethod:IApproximator{
 
 		public Polynomial Approximate(ISelection XY, int order){
-			RealMatrix A = new RealMatrix(order, order);
-			RealMatrix B = new RealMatrix(order, 1);
+			Matrix A = new Matrix(order, order);
+			Matrix B = new Matrix(order, 1);
 
 			for (int i = 0; i < order; i++)
 			{
