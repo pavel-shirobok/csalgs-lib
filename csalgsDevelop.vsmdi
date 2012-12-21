@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <TestList name="MatrixTest" id="7558bc0e-81e4-41ba-973f-caac21cc5580" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="Tokenizer" id="2089fd2b-ab6d-41e8-a0c6-ce2ec090b734" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <TestLinks>
+      <TestLink id="d8280410-5761-26be-0cef-d1dbf788d658" name="TestInit" storage="csalgs-tests\bin\debug\csalgs-tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="5904d473-ba94-03fb-698d-17ae40b66aff" name="TestEqual" storage="csalgs-tests\bin\debug\csalgs-tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="9acb4029-ff3f-c773-1ab3-b5fa3b8ddbeb" name="TestTokens" storage="csalgs-tests\bin\debug\csalgs-tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="2771e799-05af-8747-9a87-0df5640bda79" name="TestNotEqual" storage="csalgs-tests\bin\debug\csalgs-tests.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
   <TestList name="Списки тестов" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
     <RunConfiguration id="33e8f77a-aedd-4eb4-b993-4519a8e33f6d" name="Локальные" storage="local.testsettings" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   </TestList>

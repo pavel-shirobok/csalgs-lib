@@ -42,6 +42,7 @@
     <Compile Include="src\algs\sorting\QuickSort.cs" />
     <Compile Include="src\algs\sorting\SortHelper.cs" />
     <Compile Include="src\algs\sorting\ISortMethod.cs" />
+    <Compile Include="src\formula\Tokenizer.cs" />
     <Compile Include="src\math\base_concept\Complex.cs" />
     <Compile Include="src\math\base_concept\Kernel.cs" />
     <Compile Include="src\math\base_concept\matrix\Matrix.NonSimpleActions.cs" />
