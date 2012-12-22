@@ -52,159 +52,140 @@ namespace csalgs.formula
         Token[] GetTokens(String expression);
     }
 
-    internal enum TokenizerReadingState {
+    /*public enum TokenizerReadingState {
         START, OPERATION, NUMBER, IDENT, BRACKETS, COMMA, WHITES, ERROR
-    }
+    }*/
 
     public sealed class Tokenizer:ITokenizer {
         public Tokenizer() {}
 
-        private const String IDENT_SYMBOLS = "0987654321qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
-        private const String NUMBER_SYMBOLS = "0987654321.";
-        private const String OPERATIONS = "=+-/*^";
-        private const String BRACKETS = "()";
-        private const String WHITES = " \t";
-        private const String COMMA = ",";
+		private const String IDENT_SYMBOLS = "0987654321qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
+		private const String NUMBER_SYMBOLS = "0987654321.";
+		private const String OPERATIONS = "=+-/*^";
+		private const String BRACKETS = "()";
+		private const String WHITES = " \t";
+		private const String COMMA = ",";
+		
+		private delegate void commit();
+		
+		private delegate bool checkChar(char cc);
+
 
         public Token[] GetTokens(String expression)
         {
             List<Token> tokens = new List<Token>();
+			
+			const int NOT_FIND = -1;
 
             int length = expression.Length;
 			int lastIndex = length - 1;
 			TokenType tempTokenType;
-            char currentChar = '&';
+            char currentChar = ' ';
             string buffer = "";
-			bool wasLastReading = false;
-            TokenizerReadingState state = TokenizerReadingState.START;
+
 			int index = 0;
-            for (index = 0; index < length; index++) {
-                
+
+			checkChar NumberChecker = IsNumberChar;//()=>{return NUMBER_SYMBOLS.IndexOf(currentChar)!=NOT_FIND;};
+			checkChar WhitesChecker = IsWhites;//()=>{return WHITES.IndexOf(currentChar)!=NOT_FIND;};
+			checkChar IdentifierChecker = IsIdentifierChar;//()=>{return IDENT_SYMBOLS.IndexOf(currentChar)!=NOT_FIND;};
+			checkChar BracketsChecker = IsBracketsChar;//()=>{return BRACKETS.IndexOf(currentChar)!=NOT_FIND;};
+			checkChar OperationsChecker = IsOperationChar;//()=>{return OPERATIONS.IndexOf(currentChar)!=NOT_FIND;};
+			checkChar CommaChecker = IsCommaChar;//()=>{return COMMA.IndexOf(currentChar)!=NOT_FIND;};
+
+			commit NumberCommit = ()=>{tokens.Add(new Token(TokenType.NUMBER, buffer));};
+			
+			commit WhitesCommit = ()=>{};
+			
+			commit IdentifierCommit = ()=>{tokens.Add(new Token(TokenType.IDENT, buffer));};
+			
+			commit BracketsCommit = ()=>{
+				tempTokenType = GetBracketsTokenTypeByValue(buffer);
+				if(tempTokenType == TokenType.UNKNOWN){
+					Error(index, buffer, "Unknown token when reading braces");
+				}
+				tokens.Add(new Token(tempTokenType, buffer));
+			};
+
+			commit OperationsCommit = ()=>{
+				tempTokenType = GetOperationTokenTypeByValue(buffer);
+				if (tempTokenType == TokenType.UNKNOWN)
+				{
+					Error(index, buffer, "Unknown token when reading operations");
+				}
+				tokens.Add(new Token(tempTokenType, buffer));
+			};
+
+			commit CommaCommit = () => {tokens.Add(new Token(TokenType.COMMA, buffer));};
+
+			checkChar currentChecker = null;
+			commit currentCommiter = null;
+
+			for (index = 0; index < length; index++) {
 				currentChar = expression[index];
-				#region Start state
-				if (state == TokenizerReadingState.START) {
-					state = GetStateByChar(currentChar);
-					if (state == TokenizerReadingState.ERROR) Error(index, buffer, "Unknown char='" + currentChar + "'");
+				#region Start
+				if(currentChecker==null || currentCommiter==null){
+					if (NumberChecker(currentChar)){
+						currentChecker = NumberChecker;
+						currentCommiter = NumberCommit;
+					}
+					else if (IdentifierChecker(currentChar))
+					{
+						currentChecker = IdentifierChecker;
+						currentCommiter = IdentifierCommit;
+					}
+					else if (OperationsChecker(currentChar))
+					{
+						currentChecker = OperationsChecker;
+						currentCommiter = OperationsCommit;
+					}
+					else if (BracketsChecker(currentChar))
+					{
+						currentChecker = BracketsChecker;
+						currentCommiter = BracketsCommit;
+					}
+					else if (WhitesChecker(currentChar))
+					{
+						currentChecker = WhitesChecker;
+						currentCommiter = WhitesCommit;
+					}
+					else if (CommaChecker(currentChar))
+					{
+						currentChecker = CommaChecker;
+						currentCommiter = CommaCommit;
+					}
+
+					if(currentChecker==null || currentCommiter==null){
+						Error(index, buffer, "Unknown char='" + currentChar + "'");	
+					}
+					
 					index--;
 					continue;
 				}
 				#endregion
-				
-				//Reading:
-                switch (state) {
-                    case TokenizerReadingState.WHITES:break;
 
-                    case TokenizerReadingState.NUMBER:
-						if(IsNumberChar(currentChar)){
-							buffer+=currentChar;
-						}else{
-							index--;
-							state = TokenizerReadingState.START;
-							tokens.Add(new Token(TokenType.NUMBER, buffer));
-							buffer = "";
-						}
-						break;
-
-                    case TokenizerReadingState.IDENT:
-						if(IsIdentifierChar(currentChar)){
-							buffer+=currentChar;
-						}else{
-							index--;
-							state = TokenizerReadingState.START;
-							tokens.Add(new Token(TokenType.IDENT, buffer));
-							buffer = "";
-						}
-                        break;
-
-                    case TokenizerReadingState.BRACKETS:
-						if (IsBracketsChar(currentChar))
-						{
-							buffer += currentChar;
-						}
-						else
-						{
-						
-							index--;
-							state = TokenizerReadingState.START;
-							tempTokenType = GetBracketsTokenTypeByValue(buffer);
-							if(tempTokenType == TokenType.UNKNOWN){
-								Error(index, buffer, "Unknown token when reading braces");
-							}
-							tokens.Add(new Token(tempTokenType, buffer));
-							buffer = "";
-						}
-                        break;
-
-                    case TokenizerReadingState.OPERATION:
-						if (IsOperationChar(currentChar))
-						{
-							buffer += currentChar;
-						}
-						else
-						{
-							index--;
-							state = TokenizerReadingState.START;
-							tempTokenType = GetOperationTokenTypeByValue(buffer);
-							if (tempTokenType == TokenType.UNKNOWN)
-							{
-								Error(index, buffer, "Unknown token when reading operations");
-							}
-							tokens.Add(new Token(tempTokenType, buffer));
-							buffer = "";
-						}
-                        break;
-                }
-            }
-
-			switch (state)
-			{
-				case TokenizerReadingState.WHITES: break;
-
-				case TokenizerReadingState.NUMBER:
-						state = TokenizerReadingState.START;
-						tokens.Add(new Token(TokenType.NUMBER, buffer));
-						buffer = "";
-					break;
-
-				case TokenizerReadingState.IDENT:
-						index--;
-						state = TokenizerReadingState.START;
-						tokens.Add(new Token(TokenType.IDENT, buffer));
-						buffer = "";
-					break;
-
-				case TokenizerReadingState.BRACKETS:
-						index--;
-						state = TokenizerReadingState.START;
-						tempTokenType = GetBracketsTokenTypeByValue(buffer);
-						if (tempTokenType == TokenType.UNKNOWN)
-						{
-							Error(index, buffer, "Unknown token when reading braces");
-						}
-						tokens.Add(new Token(tempTokenType, buffer));
-						buffer = "";
+				if (currentChecker(currentChar))
+				{
+					buffer+=currentChar;
+				}else{
 					
-					break;
+					currentCommiter();
 
-				case TokenizerReadingState.OPERATION:
-					
-						index--;
-						state = TokenizerReadingState.START;
-						tempTokenType = GetOperationTokenTypeByValue(buffer);
-						if (tempTokenType == TokenType.UNKNOWN)
-						{
-							Error(index, buffer, "Unknown token when reading operations");
-						}
-						tokens.Add(new Token(tempTokenType, buffer));
-						buffer = "";
-					
-					break;
+					index--;
+					buffer = "";
+					currentChecker = null;
+					currentCommiter = null;
+				}
 			}
 
-            return tokens.ToArray();
+			if(currentChecker!=null && currentCommiter!=null && buffer.Length>0){
+				currentCommiter();
+			}
+
+			return tokens.ToArray();
         }
 
-        private TokenizerReadingState GetStateByChar(char currentChar) {
+		/*protected TokenizerReadingState GetStateByChar(char currentChar)
+		{
             if (IsNumberChar(currentChar)) return TokenizerReadingState.NUMBER;
             if (IsIdentifierChar(currentChar))return TokenizerReadingState.IDENT;
             if (IsOperationChar(currentChar))return TokenizerReadingState.OPERATION;
@@ -213,9 +194,10 @@ namespace csalgs.formula
             if (IsCommaChar(currentChar)) return TokenizerReadingState.COMMA;
 
             return TokenizerReadingState.ERROR;
-        }
+        }*/
 
-		private TokenType GetOperationTokenTypeByValue(String value){
+		private TokenType GetOperationTokenTypeByValue(String value)
+		{
 			switch(value){
 				case "+":
 					return TokenType.PLUS;
@@ -252,39 +234,43 @@ namespace csalgs.formula
 			return TokenType.UNKNOWN;
 		}
 
-        private bool IsWhites(char c) {
-            return CheckCharInAlphabet(c, WHITES);
+		private bool IsWhites(char c)
+		{
+            return -1!= WHITES.IndexOf(c);// CheckCharInAlphabet(c, WHITES);
         }
 
-        private bool IsIdentifierChar(char c) {
-            return CheckCharInAlphabet(c, IDENT_SYMBOLS);
+		private bool IsIdentifierChar(char c)
+		{
+            return -1!= IDENT_SYMBOLS.IndexOf(c);// CheckCharInAlphabet(c, IDENT_SYMBOLS);
         }
 
-        private bool IsNumberChar(char c)
+		private bool IsNumberChar(char c)
         {
-            return CheckCharInAlphabet(c, NUMBER_SYMBOLS);
+            return -1!=NUMBER_SYMBOLS.IndexOf(c);//CheckCharInAlphabet(c, NUMBER_SYMBOLS);
         }
 
-        private bool IsOperationChar(char c)
+		private bool IsOperationChar(char c)
         {
-            return CheckCharInAlphabet(c, OPERATIONS);
+            return -1!= OPERATIONS.IndexOf(c);// CheckCharInAlphabet(c, OPERATIONS);
         }
 
-        private bool IsBracketsChar(char c)
+		private bool IsBracketsChar(char c)
         {
-            return CheckCharInAlphabet(c, BRACKETS);
+            return -1!= BRACKETS.IndexOf(c);// CheckCharInAlphabet(c, BRACKETS);
         }
 
-        private bool IsCommaChar(char c)
+		private bool IsCommaChar(char c)
         {
-            return CheckCharInAlphabet(c, COMMA);
+            return -1!=COMMA.IndexOf(c);//CheckCharInAlphabet(c, COMMA);
         }
 
-        private bool CheckCharInAlphabet(char c, String alphabet) {
+		private bool CheckCharInAlphabet(char c, String alphabet)
+		{
             return alphabet.IndexOf(c) != -1;
         }
 
-        private void Error(int index, String buffer, String text) {
+		private void Error(int index, String buffer, String text)
+		{
             throw new TokenizerError(text, buffer, index);
         }
     }
