@@ -4,14 +4,45 @@ using System.Text;
 
 namespace csalgs.formula
 {
+	public class TokenizerError : Exception
+	{
+		private String buffer;
+		private int index;
+
+		public TokenizerError(String text, String buffer, int index)
+			: base(text)
+		{
+			this.buffer = buffer;
+			this.index = index;
+		}
+
+		public String Buffer
+		{
+			get
+			{
+				return this.buffer;
+			}
+		}
+
+		public int Index
+		{
+			get
+			{
+				return this.index;
+			}
+		}
+
+	}
+
     public enum TokenType:int {
+		WHITE = -2,
 		UNKNOWN = -1,
         NUMBER = 0, 
         PLUS=1, MINUS=2, PRODUCT=3, DIVISION=4, EQUAL=5,
         POWER=6,
-        IDENT=7,
+        IDENTIFIER=7,
         DOT=8, COMMA=9,
-        LEFT_BRACKET=10, RIGHT_BRACKET=11//, LEFT_SQUARE_BRACKET=12, RIGHT_SQUARE_BRACKET=13
+        LEFT_BRACKET=10, RIGHT_BRACKET=11
     }
 
     public class Token
@@ -46,15 +77,16 @@ namespace csalgs.formula
         {
             return Value.GetHashCode() ^ (int)Type;
         }
+
+		public override string ToString()
+		{
+			return "Token(" + Type + ", " +Value + ")";
+		}
     }
 
     public interface ITokenizer {
         Token[] GetTokens(String expression);
     }
-
-    /*public enum TokenizerReadingState {
-        START, OPERATION, NUMBER, IDENT, BRACKETS, COMMA, WHITES, ERROR
-    }*/
 
     public sealed class Tokenizer:ITokenizer {
         public Tokenizer() {}
@@ -66,8 +98,7 @@ namespace csalgs.formula
 		private const String WHITES = " \t";
 		private const String COMMA = ",";
 		
-		private delegate void commit();
-		
+		private delegate void commit(char currentChar, String buffer, int index, List<Token> tokens);
 		private delegate bool checkChar(char cc);
 
 
@@ -75,47 +106,11 @@ namespace csalgs.formula
         {
             List<Token> tokens = new List<Token>();
 			
-			const int NOT_FIND = -1;
-
             int length = expression.Length;
-			int lastIndex = length - 1;
-			TokenType tempTokenType;
-            char currentChar = ' ';
-            string buffer = "";
-
 			int index = 0;
 
-			checkChar NumberChecker = IsNumberChar;//()=>{return NUMBER_SYMBOLS.IndexOf(currentChar)!=NOT_FIND;};
-			checkChar WhitesChecker = IsWhites;//()=>{return WHITES.IndexOf(currentChar)!=NOT_FIND;};
-			checkChar IdentifierChecker = IsIdentifierChar;//()=>{return IDENT_SYMBOLS.IndexOf(currentChar)!=NOT_FIND;};
-			checkChar BracketsChecker = IsBracketsChar;//()=>{return BRACKETS.IndexOf(currentChar)!=NOT_FIND;};
-			checkChar OperationsChecker = IsOperationChar;//()=>{return OPERATIONS.IndexOf(currentChar)!=NOT_FIND;};
-			checkChar CommaChecker = IsCommaChar;//()=>{return COMMA.IndexOf(currentChar)!=NOT_FIND;};
-
-			commit NumberCommit = ()=>{tokens.Add(new Token(TokenType.NUMBER, buffer));};
-			
-			commit WhitesCommit = ()=>{};
-			
-			commit IdentifierCommit = ()=>{tokens.Add(new Token(TokenType.IDENT, buffer));};
-			
-			commit BracketsCommit = ()=>{
-				tempTokenType = GetBracketsTokenTypeByValue(buffer);
-				if(tempTokenType == TokenType.UNKNOWN){
-					Error(index, buffer, "Unknown token when reading braces");
-				}
-				tokens.Add(new Token(tempTokenType, buffer));
-			};
-
-			commit OperationsCommit = ()=>{
-				tempTokenType = GetOperationTokenTypeByValue(buffer);
-				if (tempTokenType == TokenType.UNKNOWN)
-				{
-					Error(index, buffer, "Unknown token when reading operations");
-				}
-				tokens.Add(new Token(tempTokenType, buffer));
-			};
-
-			commit CommaCommit = () => {tokens.Add(new Token(TokenType.COMMA, buffer));};
+            char currentChar = ' ';
+            string buffer = "";
 
 			checkChar currentChecker = null;
 			commit currentCommiter = null;
@@ -124,33 +119,33 @@ namespace csalgs.formula
 				currentChar = expression[index];
 				#region Start
 				if(currentChecker==null || currentCommiter==null){
-					if (NumberChecker(currentChar)){
-						currentChecker = NumberChecker;
+					if (IsNumberChar(currentChar)){
+						currentChecker = IsNumberChar;
 						currentCommiter = NumberCommit;
 					}
-					else if (IdentifierChecker(currentChar))
+					else if (IsIdentifierChar(currentChar))
 					{
-						currentChecker = IdentifierChecker;
+						currentChecker = IsIdentifierChar;
 						currentCommiter = IdentifierCommit;
 					}
-					else if (OperationsChecker(currentChar))
+					else if (IsOperationChar(currentChar))
 					{
-						currentChecker = OperationsChecker;
+						currentChecker = IsOperationChar;
 						currentCommiter = OperationsCommit;
 					}
-					else if (BracketsChecker(currentChar))
+					else if (IsBracketsChar(currentChar))
 					{
-						currentChecker = BracketsChecker;
+						currentChecker = IsBracketsChar;
 						currentCommiter = BracketsCommit;
 					}
-					else if (WhitesChecker(currentChar))
+					else if (IsWhites(currentChar))
 					{
-						currentChecker = WhitesChecker;
+						currentChecker = IsWhites;
 						currentCommiter = WhitesCommit;
 					}
-					else if (CommaChecker(currentChar))
+					else if (IsCommaChar(currentChar))
 					{
-						currentChecker = CommaChecker;
+						currentChecker = IsCommaChar;
 						currentCommiter = CommaCommit;
 					}
 
@@ -168,7 +163,7 @@ namespace csalgs.formula
 					buffer+=currentChar;
 				}else{
 					
-					currentCommiter();
+					currentCommiter(currentChar, buffer, index - buffer.Length, tokens);
 
 					index--;
 					buffer = "";
@@ -178,23 +173,47 @@ namespace csalgs.formula
 			}
 
 			if(currentChecker!=null && currentCommiter!=null && buffer.Length>0){
-				currentCommiter();
+				currentCommiter(currentChar, buffer, index, tokens);
 			}
 
 			return tokens.ToArray();
         }
 
-		/*protected TokenizerReadingState GetStateByChar(char currentChar)
-		{
-            if (IsNumberChar(currentChar)) return TokenizerReadingState.NUMBER;
-            if (IsIdentifierChar(currentChar))return TokenizerReadingState.IDENT;
-            if (IsOperationChar(currentChar))return TokenizerReadingState.OPERATION;
-            if(IsBracketsChar(currentChar))return TokenizerReadingState.BRACKETS;
-            if(IsWhites(currentChar))return TokenizerReadingState.WHITES;
-            if (IsCommaChar(currentChar)) return TokenizerReadingState.COMMA;
+		private void NumberCommit(char currentChar, String buffer, int index, List<Token> tokens){
+			tokens.Add(new Token(TokenType.NUMBER, buffer));
+		}
 
-            return TokenizerReadingState.ERROR;
-        }*/
+		private void WhitesCommit(char currentChar, String buffer, int index, List<Token> tokens){
+			tokens.Add(new Token(TokenType.WHITE, buffer));
+		}
+			
+		private void IdentifierCommit(char currentChar, String buffer, int index, List<Token> tokens){
+			tokens.Add(new Token(TokenType.IDENTIFIER, buffer));
+		}
+			
+		private void BracketsCommit(char currentChar, String buffer, int index, List<Token> tokens){
+			TokenType tempTokenType;
+			for(int i = 0; i<buffer.Length; i++){
+				tempTokenType = GetBracketsTokenTypeByValue(buffer[i].ToString());
+				if(tempTokenType == TokenType.UNKNOWN){
+					Error(index, buffer[i].ToString(), "Unknown token when reading braces");
+				}
+				tokens.Add(new Token(tempTokenType, buffer[i].ToString()));
+			}
+		}
+
+		private void OperationsCommit(char currentChar, String buffer, int index, List<Token>tokens){
+			TokenType tempTokenType = GetOperationTokenTypeByValue(buffer);
+			if (tempTokenType == TokenType.UNKNOWN)
+			{
+				Error(index, buffer, "Unknown token when reading operations");
+			}
+			tokens.Add(new Token(tempTokenType, buffer));
+		}
+
+		private void CommaCommit(char currentChar, String buffer, int index, List<Token>tokens){
+			tokens.Add(new Token(TokenType.COMMA, buffer));
+		}
 
 		private TokenType GetOperationTokenTypeByValue(String value)
 		{
@@ -236,37 +255,32 @@ namespace csalgs.formula
 
 		private bool IsWhites(char c)
 		{
-            return -1!= WHITES.IndexOf(c);// CheckCharInAlphabet(c, WHITES);
+            return -1 != WHITES.IndexOf(c);
         }
 
 		private bool IsIdentifierChar(char c)
 		{
-            return -1!= IDENT_SYMBOLS.IndexOf(c);// CheckCharInAlphabet(c, IDENT_SYMBOLS);
+            return -1 != IDENT_SYMBOLS.IndexOf(c);
         }
 
 		private bool IsNumberChar(char c)
         {
-            return -1!=NUMBER_SYMBOLS.IndexOf(c);//CheckCharInAlphabet(c, NUMBER_SYMBOLS);
+            return -1 != NUMBER_SYMBOLS.IndexOf(c);
         }
 
 		private bool IsOperationChar(char c)
         {
-            return -1!= OPERATIONS.IndexOf(c);// CheckCharInAlphabet(c, OPERATIONS);
+            return -1 != OPERATIONS.IndexOf(c);
         }
 
 		private bool IsBracketsChar(char c)
         {
-            return -1!= BRACKETS.IndexOf(c);// CheckCharInAlphabet(c, BRACKETS);
+            return -1 != BRACKETS.IndexOf(c);
         }
 
 		private bool IsCommaChar(char c)
         {
-            return -1!=COMMA.IndexOf(c);//CheckCharInAlphabet(c, COMMA);
-        }
-
-		private bool CheckCharInAlphabet(char c, String alphabet)
-		{
-            return alphabet.IndexOf(c) != -1;
+            return -1 != COMMA.IndexOf(c);
         }
 
 		private void Error(int index, String buffer, String text)
@@ -274,12 +288,4 @@ namespace csalgs.formula
             throw new TokenizerError(text, buffer, index);
         }
     }
-
-    public class TokenizerError:Exception{
-        public TokenizerError(String text, String buffer, int index) : base(text) {
-            
-        }
-    }
-
-
 }

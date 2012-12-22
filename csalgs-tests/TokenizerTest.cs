@@ -41,41 +41,24 @@ namespace csalgs_tests
         [TestMethod]
         public void TestTokens()
         {
-			for(int i =0; i<250000; i++){
-            Test("x=1+2", new Token[] { T(TokenType.IDENT, "x"), 
-                                        T(TokenType.EQUAL, "="), 
-                                        T(TokenType.NUMBER, "1"), 
-                                        T(TokenType.PLUS, "+"), 
-                                        T(TokenType.NUMBER, "2") });
-
-            Test("x=y-2.3", new Token[] { T(TokenType.IDENT, "x"), 
-                                        T(TokenType.EQUAL, "="), 
-                                        T(TokenType.IDENT, "y"), 
-                                        T(TokenType.MINUS, "-"), 
-                                        T(TokenType.NUMBER, "2.3") });
-
-            Test("x=fun(123.3+4^1)", new Token[] {  T(TokenType.IDENT, "x"), 
-                                                    T(TokenType.EQUAL, "="), 
-                                                    T(TokenType.IDENT, "fun"), 
-                                                    T(TokenType.LEFT_BRACKET, "("), 
-                                                    T(TokenType.NUMBER, "123.3"), 
-                                                    T(TokenType.PLUS, "+"),
-                                                    T(TokenType.NUMBER, "4"), 
-                                                    T(TokenType.POWER, "^"),
-                                                    T(TokenType.NUMBER, "1"), 
-                                                    T(TokenType.RIGHT_BRACKET, ")") });
-			}
+			Test("1+2+3+4 +5 - 10 * fff(123123+ff()+gg(1,2)");
+            Test("x=1+2");
+            Test("x=y-2.3");
+            Test(" x= fun(123.3 + 4^1)^ ( 123 +x* sin(PI))");
         }
 
-        private void Test(String expr, Token[] tokens) {
-            ITokenizer tokenizer = GetTokenizer();
+		private void Test(String expr)
+		{
+			ITokenizer tokenizer = GetTokenizer();
 			Token[] actual = tokenizer.GetTokens(expr);
-			int i  = 0;
-			for(i =0; i<actual.Length; i++){
-				Assert.IsTrue(tokens[i].Equals(actual[i]));
+			string actualString="";
+
+			for(int i = 0; i< actual.Length; i++){
+				actualString+=actual[i].Value;
 			}
-            //Assert.AreEqual<Token[]>(tokens, actual);
-        }
+
+			Assert.AreEqual<string>(expr, actualString);
+		}
 
         private Token T(TokenType t, String s) {
             return new Token(t, s);
