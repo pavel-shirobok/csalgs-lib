@@ -45,6 +45,7 @@ namespace csalgs_tests
             Test("x=1+2");
             Test("x=y-2.3");
             Test(" x= fun(123.3 + 4^1)^ ( 123 +x* sin(PI))");
+			Test(" x= fun(-123.3 + -4^-1)^ ( 123 +x* -sin(-PI))");
         }
 
 		[TestMethod]
@@ -53,7 +54,7 @@ namespace csalgs_tests
 			Test("1+2+3+4 +5 - 10 * fff(123123+ff()+gg(1,2)",true);
 			Test("x=1+2", true);
 			Test("x=y-2.3", true);
-			Test(" x= fun(123.3 + 4^1)^ ( 123 +x* sin(PI))", true);
+			Test(" x= fun(12.33 + 4^1)^ ( 123 +x* sin(PI))", true);
 		}
 
 		private void Test(String expr)

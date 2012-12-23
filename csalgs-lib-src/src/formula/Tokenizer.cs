@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace csalgs.formula
 {
@@ -113,6 +114,9 @@ namespace csalgs.formula
 
 		private bool ignoreWhites = true;
 
+		private NumberStyles numberStyles = NumberStyles.Any;
+		private IFormatProvider formatProvider = CultureInfo.GetCultureInfo("en-US");
+
 		public Tokenizer() { }
 
         public Token[] GetTokens(String expression)
@@ -201,6 +205,10 @@ namespace csalgs.formula
         }
 
 		private void NumberCommit(char currentChar, String buffer, int index, List<Token> tokens){
+			double number;
+			if(!double.TryParse(buffer, numberStyles, formatProvider, out number)){
+				Error(index, buffer, "Incorrect number format");
+			}
 			tokens.Add(new Token(TokenType.NUMBER, buffer, index));
 		}
 
@@ -229,16 +237,24 @@ namespace csalgs.formula
 		}
 
 		private void OperationsCommit(char currentChar, String buffer, int index, List<Token>tokens){
-			TokenType tempTokenType = GetOperationTokenTypeByValue(buffer);
-			if (tempTokenType == TokenType.UNKNOWN)
+			TokenType tempTokenType;
+			
+			for (int i = 0; i < buffer.Length; i++)
 			{
-				Error(index, buffer, "Unknown token when reading operations");
+				tempTokenType = GetOperationTokenTypeByValue(buffer[i].ToString());
+				if (tempTokenType == TokenType.UNKNOWN)
+				{
+					Error(index, buffer[i].ToString(), "Unknown token when reading operations");
+				}
+				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), index));
 			}
-			tokens.Add(new Token(tempTokenType, buffer, index));
 		}
 
 		private void CommaCommit(char currentChar, String buffer, int index, List<Token>tokens){
-			tokens.Add(new Token(TokenType.COMMA, buffer, index));
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				tokens.Add(new Token(TokenType.COMMA, buffer[i].ToString(), index));
+			}
 		}
 
 		private TokenType GetOperationTokenTypeByValue(String value)
