@@ -6,7 +6,6 @@ namespace csalgs.sorting
 {
     public class BubbleSort<T>:AbstractSortMethod<T>
     {
-        private Boolean whasChanged = true;
         private T current;
         private int lightIndex;
 

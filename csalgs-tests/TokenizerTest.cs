@@ -47,21 +47,42 @@ namespace csalgs_tests
             Test(" x= fun(123.3 + 4^1)^ ( 123 +x* sin(PI))");
         }
 
+		[TestMethod]
+		public void TestTokensIgnoreWhites()
+		{
+			Test("1+2+3+4 +5 - 10 * fff(123123+ff()+gg(1,2)",true);
+			Test("x=1+2", true);
+			Test("x=y-2.3", true);
+			Test(" x= fun(123.3 + 4^1)^ ( 123 +x* sin(PI))", true);
+		}
+
 		private void Test(String expr)
 		{
-			ITokenizer tokenizer = GetTokenizer();
-			Token[] actual = tokenizer.GetTokens(expr);
-			string actualString="";
+			Test(expr, false);
+		}
 
-			for(int i = 0; i< actual.Length; i++){
-				actualString+=actual[i].Value;
+		private void Test(string expr, bool ignoreWhites){
+			ITokenizer tokenizer = GetTokenizer();
+			tokenizer.IgnoreWhites = ignoreWhites;
+			
+			if(ignoreWhites){
+				expr = expr.Replace(" ","");
+				expr = expr.Replace("\t","");
+			}
+
+			Token[] actual = tokenizer.GetTokens(expr);
+			string actualString = "";
+
+			for (int i = 0; i < actual.Length; i++)
+			{
+				actualString += actual[i].Value;
 			}
 
 			Assert.AreEqual<string>(expr, actualString);
 		}
 
         private Token T(TokenType t, String s) {
-            return new Token(t, s);
+            return new Token(t, s, 0);
         }
     }
 }

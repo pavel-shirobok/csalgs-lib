@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace csalgs.formula
 {
@@ -49,10 +48,12 @@ namespace csalgs.formula
     {
         private String value;
         private TokenType type;
+		private int index;
 
-        public Token(TokenType type, String value) {
+        public Token(TokenType type, String value, int index) {
             this.type = type;
             this.value = value;
+			this.index = index;
         }
 
         public String Value {
@@ -66,6 +67,12 @@ namespace csalgs.formula
                 return type;
             }
         }
+
+		public int Index{
+			get{
+				return index;
+			}
+		}
 
         public override bool Equals(object obj)
         {
@@ -86,10 +93,13 @@ namespace csalgs.formula
 
     public interface ITokenizer {
         Token[] GetTokens(String expression);
+		Boolean IgnoreWhites{
+			get;
+			set;
+		}
     }
 
     public sealed class Tokenizer:ITokenizer {
-        public Tokenizer() {}
 
 		private const String IDENT_SYMBOLS = "0987654321qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
 		private const String NUMBER_SYMBOLS = "0987654321.";
@@ -101,6 +111,9 @@ namespace csalgs.formula
 		private delegate void commit(char currentChar, String buffer, int index, List<Token> tokens);
 		private delegate bool checkChar(char cc);
 
+		private bool ignoreWhites = true;
+
+		public Tokenizer() { }
 
         public Token[] GetTokens(String expression)
         {
@@ -111,12 +124,20 @@ namespace csalgs.formula
 
             char currentChar = ' ';
             string buffer = "";
+			commit whites;
+
+			if(IgnoreWhites){
+				whites = WhitesCommitWithIgnoring;
+			}else{
+				whites = WhitesCommit;
+			}
 
 			checkChar currentChecker = null;
 			commit currentCommiter = null;
 
 			for (index = 0; index < length; index++) {
 				currentChar = expression[index];
+
 				#region Start
 				if(currentChecker==null || currentCommiter==null){
 					if (IsNumberChar(currentChar)){
@@ -141,7 +162,7 @@ namespace csalgs.formula
 					else if (IsWhites(currentChar))
 					{
 						currentChecker = IsWhites;
-						currentCommiter = WhitesCommit;
+						currentCommiter = whites;
 					}
 					else if (IsCommaChar(currentChar))
 					{
@@ -180,15 +201,20 @@ namespace csalgs.formula
         }
 
 		private void NumberCommit(char currentChar, String buffer, int index, List<Token> tokens){
-			tokens.Add(new Token(TokenType.NUMBER, buffer));
+			tokens.Add(new Token(TokenType.NUMBER, buffer, index));
 		}
 
 		private void WhitesCommit(char currentChar, String buffer, int index, List<Token> tokens){
-			tokens.Add(new Token(TokenType.WHITE, buffer));
+			tokens.Add(new Token(TokenType.WHITE, buffer, index));
+		}
+
+		private void WhitesCommitWithIgnoring(char currentChar, String buffer, int index, List<Token> tokens)
+		{
+			//ignoring
 		}
 			
 		private void IdentifierCommit(char currentChar, String buffer, int index, List<Token> tokens){
-			tokens.Add(new Token(TokenType.IDENTIFIER, buffer));
+			tokens.Add(new Token(TokenType.IDENTIFIER, buffer, index));
 		}
 			
 		private void BracketsCommit(char currentChar, String buffer, int index, List<Token> tokens){
@@ -198,7 +224,7 @@ namespace csalgs.formula
 				if(tempTokenType == TokenType.UNKNOWN){
 					Error(index, buffer[i].ToString(), "Unknown token when reading braces");
 				}
-				tokens.Add(new Token(tempTokenType, buffer[i].ToString()));
+				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), index));
 			}
 		}
 
@@ -208,11 +234,11 @@ namespace csalgs.formula
 			{
 				Error(index, buffer, "Unknown token when reading operations");
 			}
-			tokens.Add(new Token(tempTokenType, buffer));
+			tokens.Add(new Token(tempTokenType, buffer, index));
 		}
 
 		private void CommaCommit(char currentChar, String buffer, int index, List<Token>tokens){
-			tokens.Add(new Token(TokenType.COMMA, buffer));
+			tokens.Add(new Token(TokenType.COMMA, buffer, index));
 		}
 
 		private TokenType GetOperationTokenTypeByValue(String value)
@@ -287,5 +313,17 @@ namespace csalgs.formula
 		{
             throw new TokenizerError(text, buffer, index);
         }
-    }
+
+		public bool IgnoreWhites
+		{
+			get
+			{
+				return ignoreWhites;
+			}
+			set
+			{
+				ignoreWhites = value;
+			}
+		}
+	}
 }
