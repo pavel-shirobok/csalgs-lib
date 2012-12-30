@@ -35,6 +35,7 @@ namespace csalgs.formula
 	}
 
     public enum TokenType:int {
+		EOL = -3,
 		WHITE = -2,
 		UNKNOWN = -1,
         NUMBER = 0, 
@@ -50,11 +51,13 @@ namespace csalgs.formula
         private String value;
         private TokenType type;
 		private int index;
+		private bool negative;
 
-        public Token(TokenType type, String value, int index) {
+        public Token(TokenType type, String value, bool negative, int index) {
             this.type = type;
             this.value = value;
 			this.index = index;
+			this.negative = negative;
         }
 
         public String Value {
@@ -69,22 +72,17 @@ namespace csalgs.formula
             }
         }
 
+		public bool Negative{
+			get{
+				return negative;
+			}
+		}
+
 		public int Index{
 			get{
 				return index;
 			}
 		}
-
-        public override bool Equals(object obj)
-        {
-            Token inp = (obj as Token);
-            return inp.Type == Type && inp.Value == (Value);
-        }
-
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode() ^ (int)Type;
-        }
 
 		public override string ToString()
 		{
@@ -108,12 +106,12 @@ namespace csalgs.formula
 		private const String BRACKETS = "()";
 		private const String WHITES = " \t";
 		private const String COMMA = ",";
+		private const String EOL = ";";
 		
 		private delegate void commit(char currentChar, String buffer, int index, List<Token> tokens);
 		private delegate bool checkChar(char cc);
 
 		private bool ignoreWhites = true;
-
 		private NumberStyles numberStyles = NumberStyles.Any;
 		private IFormatProvider formatProvider = CultureInfo.GetCultureInfo("en-US");
 
@@ -172,6 +170,9 @@ namespace csalgs.formula
 					{
 						currentChecker = IsCommaChar;
 						currentCommiter = CommaCommit;
+					}else if(EOL.IndexOf(currentChar)!=-1){
+						currentChecker = IsEOL;
+						currentCommiter = EOLCommit;
 					}
 
 					if(currentChecker==null || currentCommiter==null){
@@ -209,11 +210,66 @@ namespace csalgs.formula
 			if(!double.TryParse(buffer, numberStyles, formatProvider, out number)){
 				Error(index, buffer, "Incorrect number format");
 			}
-			tokens.Add(new Token(TokenType.NUMBER, buffer, index));
+			
+			tryCommitIfNegative(TokenType.NUMBER, index, buffer, tokens);
+		}
+
+		private void tryCommitIfNegative(TokenType tokenType, int index, string buffer, List<Token> tokens){
+			bool isNegative = false;
+			Token signToken = null;
+
+			if (ContainsSignIfExistAsPartOfExpression(tokens, out isNegative, out signToken))
+			{
+				tokens.Remove(signToken);
+				buffer = signToken.Value + buffer.Trim(' ', '\t');
+			}
+
+			tokens.Add(new Token(tokenType, buffer, isNegative, index));
+		}
+
+		private bool ContainsSignIfExistAsPartOfExpression(List<Token> tokens, out bool isNegative, out Token signToken){
+			Token last = null;
+			Token prelast = null;
+			int length = tokens.Count;
+			bool tokenIsAPartOfNumber = false;
+			signToken = null;
+			isNegative = false;
+
+			if (tokens.Count == 0) return false;
+			
+			last = tokens[length - 1];
+			
+			if (last.Type != TokenType.MINUS)return false;
+			
+			if (tokens.Count > 1)
+			{
+				prelast = tokens[length - 2];
+				if (prelast.Type == TokenType.DIVISION ||
+					prelast.Type == TokenType.PRODUCT ||
+					prelast.Type == TokenType.LEFT_BRACKET ||
+					prelast.Type == TokenType.COMMA ||
+					prelast.Type == TokenType.EQUAL ||
+					prelast.Type == TokenType.POWER){
+					tokenIsAPartOfNumber = true;
+					}
+			}
+			else
+			{
+				tokenIsAPartOfNumber = true;
+			}
+
+			if (tokenIsAPartOfNumber)
+			{
+				signToken = last;
+				isNegative = last.Type == TokenType.MINUS;
+				return true;
+						
+			}
+			return false;
 		}
 
 		private void WhitesCommit(char currentChar, String buffer, int index, List<Token> tokens){
-			tokens.Add(new Token(TokenType.WHITE, buffer, index));
+			tokens.Add(new Token(TokenType.WHITE, buffer, false, index));
 		}
 
 		private void WhitesCommitWithIgnoring(char currentChar, String buffer, int index, List<Token> tokens)
@@ -222,7 +278,7 @@ namespace csalgs.formula
 		}
 			
 		private void IdentifierCommit(char currentChar, String buffer, int index, List<Token> tokens){
-			tokens.Add(new Token(TokenType.IDENTIFIER, buffer, index));
+			tryCommitIfNegative(TokenType.IDENTIFIER, index, buffer, tokens);
 		}
 			
 		private void BracketsCommit(char currentChar, String buffer, int index, List<Token> tokens){
@@ -232,7 +288,7 @@ namespace csalgs.formula
 				if(tempTokenType == TokenType.UNKNOWN){
 					Error(index, buffer[i].ToString(), "Unknown token when reading braces");
 				}
-				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), index));
+				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), false, index));
 			}
 		}
 
@@ -246,14 +302,21 @@ namespace csalgs.formula
 				{
 					Error(index, buffer[i].ToString(), "Unknown token when reading operations");
 				}
-				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), index));
+				tokens.Add(new Token(tempTokenType, buffer[i].ToString(), false, index));
 			}
 		}
 
 		private void CommaCommit(char currentChar, String buffer, int index, List<Token>tokens){
 			for (int i = 0; i < buffer.Length; i++)
 			{
-				tokens.Add(new Token(TokenType.COMMA, buffer[i].ToString(), index));
+				tokens.Add(new Token(TokenType.COMMA, buffer[i].ToString(), false, index));
+			}
+		}
+
+		private void EOLCommit(char currentChar, String buffer, int index, List<Token>tokens){
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				tokens.Add(new Token(TokenType.EOL, buffer[i].ToString(), false, index));
 			}
 		}
 
@@ -293,6 +356,21 @@ namespace csalgs.formula
 					return TokenType.RIGHT_BRACKET;
 			}
 			return TokenType.UNKNOWN;
+		}
+
+		/*private Token GetLastToken(List<Token> tokens, TokenType except){
+			Token last = null;
+			if(tokens.Count == 0)return last;
+			
+			for(int i= tokens.Count-1; i>=0; i--){
+				
+			}
+
+			return last;
+		}*/
+
+		private bool IsEOL(char c){
+			return -1 != EOL.IndexOf(c);
 		}
 
 		private bool IsWhites(char c)

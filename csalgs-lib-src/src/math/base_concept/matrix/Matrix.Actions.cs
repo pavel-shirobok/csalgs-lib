@@ -14,8 +14,8 @@ namespace csalgs.math
         /// <returns></returns>
         public Matrix Append(Matrix mtx)
         {
-            if (mtx == null) throw new ArgumentNullException("mtx is null");
-            if (!IsSizeEqual(mtx)) throw new ArgumentException("Invalid matrix size to append");
+            AssertNonNull(mtx);
+            AssertMatrixSizeEqual(mtx);
 
             for (int i = 0; i < RowsCount; i++)
             {
@@ -35,7 +35,7 @@ namespace csalgs.math
         /// <returns></returns>
         public Matrix Subtract(Matrix m)
         {
-            if (IsSizeEqual(m) == false) throw new ArgumentException("Illegal matrix size");
+            AssertMatrixSizeEqual(m);
 
             for (int i = 0; i < RowsCount; i++)
             {

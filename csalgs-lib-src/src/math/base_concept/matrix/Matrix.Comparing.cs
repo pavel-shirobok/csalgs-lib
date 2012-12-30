@@ -13,7 +13,8 @@ namespace csalgs.math
         /// <returns></returns>
         public bool IsEqual(Matrix m)
         {
-            if (m == null) return false;
+            AssertNonNull(m);
+
             if (!IsSizeEqual(m)) return false;
 
             for (int i = 0; i < m.rowsCount; i++)
