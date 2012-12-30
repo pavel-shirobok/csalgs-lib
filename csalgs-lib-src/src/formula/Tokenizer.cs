@@ -110,12 +110,55 @@ namespace csalgs.formula
 		
 		private delegate void commit(char currentChar, String buffer, int index, List<Token> tokens);
 		private delegate bool checkChar(char cc);
+		
+		private readonly checkChar isNumber_delegate;
+		private readonly commit numberCommit_delegate;
+
+		private readonly checkChar isIdentifier_delegate;
+		private readonly commit identifierCommit_delegate;
+
+		private readonly checkChar isOperationChar_delegate;
+		private readonly commit operationCommit_delegate;
+
+		private readonly checkChar isBrackets_delegate;
+		private readonly commit bracketsCommit_delegate;
+
+		private readonly checkChar isWhites_delegates;
+		private readonly commit whitesCommit_delegate;
+
+		private readonly checkChar isComma_delegate;
+		private readonly commit commaCommit_delegate;
+
+		private readonly checkChar isEol_delegate;
+		private readonly commit eolCommit_delegate;
+
 
 		private bool ignoreWhites = true;
 		private NumberStyles numberStyles = NumberStyles.Any;
 		private IFormatProvider formatProvider = CultureInfo.GetCultureInfo("en-US");
 
-		public Tokenizer() { }
+		public Tokenizer() {
+			isNumber_delegate = IsNumberChar;
+			numberCommit_delegate = NumberCommit;
+
+			isIdentifier_delegate = IsIdentifierChar;
+			identifierCommit_delegate = IdentifierCommit;
+
+			isOperationChar_delegate = IsOperationChar;
+			operationCommit_delegate = OperationsCommit;
+
+			isBrackets_delegate = IsBracketsChar;
+			bracketsCommit_delegate = BracketsCommit;
+
+			isWhites_delegates = IsWhites;
+			whitesCommit_delegate = WhitesCommit;
+
+			isComma_delegate = IsCommaChar;
+			commaCommit_delegate = CommaCommit;
+
+			isEol_delegate = IsEOL;
+			eolCommit_delegate = EOLCommit;
+		}
 
         public Token[] GetTokens(String expression)
         {
@@ -143,36 +186,37 @@ namespace csalgs.formula
 				#region Start
 				if(currentChecker==null || currentCommiter==null){
 					if (IsNumberChar(currentChar)){
-						currentChecker = IsNumberChar;
-						currentCommiter = NumberCommit;
+						currentChecker = isNumber_delegate;
+						currentCommiter = numberCommit_delegate;
 					}
 					else if (IsIdentifierChar(currentChar))
 					{
-						currentChecker = IsIdentifierChar;
-						currentCommiter = IdentifierCommit;
+						currentChecker = isIdentifier_delegate;
+						currentCommiter = identifierCommit_delegate;
 					}
 					else if (IsOperationChar(currentChar))
 					{
-						currentChecker = IsOperationChar;
-						currentCommiter = OperationsCommit;
+						currentChecker = isOperationChar_delegate;
+						currentCommiter = operationCommit_delegate;
 					}
 					else if (IsBracketsChar(currentChar))
 					{
-						currentChecker = IsBracketsChar;
-						currentCommiter = BracketsCommit;
+						currentChecker = isBrackets_delegate;
+						currentCommiter = bracketsCommit_delegate;
 					}
 					else if (IsWhites(currentChar))
 					{
-						currentChecker = IsWhites;
-						currentCommiter = whites;
+						currentChecker = isWhites_delegates;
+						currentCommiter = whitesCommit_delegate;
 					}
 					else if (IsCommaChar(currentChar))
 					{
-						currentChecker = IsCommaChar;
-						currentCommiter = CommaCommit;
+						currentChecker = isComma_delegate;
+						currentCommiter = commaCommit_delegate;
+
 					}else if(EOL.IndexOf(currentChar)!=-1){
-						currentChecker = IsEOL;
-						currentCommiter = EOLCommit;
+						currentChecker = isEol_delegate;
+						currentCommiter = eolCommit_delegate;
 					}
 
 					if(currentChecker==null || currentCommiter==null){

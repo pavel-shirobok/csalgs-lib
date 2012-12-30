@@ -41,11 +41,13 @@ namespace csalgs_tests
         [TestMethod]
         public void TestTokens()
         {
-			Test("1+2+3+4+5-10*fff(123123+ff()+gg(1,2);");
-            Test("x=1+2;");
-            Test("x=y-2.3;");
-            Test("x=fun(123.3+4^1)^(123+x*sin(PI));");
-			Test("y = x=fun(-123.3+-4^-1)^(123+x*-sin(-PI));");
+			for(int i = 0; i<100000; i++){
+				Test("1+2+3+4+5-10*fff(123123+ff()+gg(1,2);");
+				Test("x=1+2;");
+				Test("x=y-2.3;");
+				Test("x=fun(123.3+4^1)^(123+x*sin(PI));");
+				Test("y = x=fun(-123.3+-4^-1)^(123+x*-sin(-PI));");
+			}
         }
 
 		[TestMethod]
