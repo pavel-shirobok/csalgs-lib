@@ -42,6 +42,8 @@
     <Compile Include="src\algs\sorting\QuickSort.cs" />
     <Compile Include="src\algs\sorting\SortHelper.cs" />
     <Compile Include="src\algs\sorting\ISortMethod.cs" />
+    <Compile Include="src\formats\agr\AgrFile.cs" />
+    <Compile Include="src\formats\agr\AgrRecord.cs" />
     <Compile Include="src\formula\Tokenizer.cs" />
     <Compile Include="src\math\base_concept\Complex.cs" />
     <Compile Include="src\math\base_concept\Kernel.cs" />
@@ -65,7 +67,6 @@
     <Compile Include="src\math\methods\statistics\Statistics.cs" />
     <Compile Include="src\math\methods\transform\Fourier.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

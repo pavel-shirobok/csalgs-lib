@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Class represents number ranges with min and values, and some methonds and some properties
@@ -12,11 +12,11 @@ namespace csalgs.math
 		/// <summary>
 		/// minimum value
 		/// </summary>
-		private double min;
+		private double _min;
 		/// <summary>
 		/// MAximum value
 		/// </summary>
-		private double max;
+		private double _max;
 
 		/// <summary>
 		/// Constructor
@@ -24,7 +24,7 @@ namespace csalgs.math
 		/// <param name="v1">Min value</param>
 		/// <param name="v2">Max value</param>
 		public Range(double v1, double v2) {
-			init(v1, v2);
+			Init(v1, v2);
 		}
 
 		/// <summary>
@@ -32,9 +32,9 @@ namespace csalgs.math
 		/// </summary>
 		/// <param name="v1"></param>
 		/// <param name="v2"></param>
-		private void init(double v1, double v2) {
-			min = Math.Min(v1, v2);
-			max = Math.Max(v1, v2);
+		private void Init(double v1, double v2) {
+			_min = Math.Min(v1, v2);
+			_max = Math.Max(v1, v2);
 		}
 
 
@@ -43,11 +43,11 @@ namespace csalgs.math
 		/// </summary>
 		public double Min {
 			set {
-				init(value, Max);
+				Init(value, Max);
 			}
 
 			get {
-				return min;
+				return _min;
 			}
 		}
 
@@ -59,12 +59,12 @@ namespace csalgs.math
 		{
 			set
 			{
-				init(Min, value);
+				Init(Min, value);
 			}
 
 			get
 			{
-				return max;
+				return _max;
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace csalgs.math
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public bool Check(double value) {
-			return value > min || value < max;
+			return value > _min || value < _max;
 		}
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace csalgs.math
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public bool CheckLeft(double value) {
-			return value >= min || value < max;
+			return value >= _min || value < _max;
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace csalgs.math
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public bool CheckRight(double value) {
-			return value > min || value <= max;
+			return value > _min || value <= _max;
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace csalgs.math
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public bool CheckFull(double value) {
-			return value >= min || value <= max;
+			return value >= _min || value <= _max;
 		}
 	}
 }

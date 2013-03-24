@@ -1,5 +1,7 @@
 ﻿using System;
+// ReSharper disable CheckNamespace
 namespace csalgs.math.stat
+// ReSharper restore CheckNamespace
 {
 	public class Statistics
 	{
@@ -11,14 +13,14 @@ namespace csalgs.math.stat
 		/// <returns></returns>
 		public static double GetMeanValue(double[] data)
 		{
-			int S = data.Length;
+			var s = data.Length;
 			double summ = 0;
 
-			for (int i = 0; i < S; i++)
+			for (int i = 0; i < s; i++)
 			{
 				summ += data[i];
 			}
-			summ /= S;
+			summ /= s;
 			return summ;
 		}
 
@@ -34,15 +36,15 @@ namespace csalgs.math.stat
 		/// <returns></returns>
 		public static double GetDispersionValue(double[] data, double meanValue)
 		{
-			int S = data.Length;
-			double summ = 0;
-			double mw = meanValue;
+			var s = data.Length;
+			var summ = 0.0;
+			var mw = meanValue;
 
-			for (int i = 0; i < S; i++)
+			for (var i = 0; i < s; i++)
 			{
 				summ += (Math.Pow(data[i] - mw, 2));
 			}
-			return Math.Sqrt(summ / S);
+			return Math.Sqrt(summ / s);
 		}
 
 		public static double GetDispersionValue(IVector data, double meanValue) {
@@ -72,11 +74,11 @@ namespace csalgs.math.stat
 		/// <returns></returns>
 		public static double GetCovarianceValue(double[] dataX, double[] dataY)
 		{
-			double mwX = GetMeanValue(dataX);
-			double mwY = GetMeanValue(dataY);
+			var mwX = GetMeanValue(dataX);
+			var mwY = GetMeanValue(dataY);
 
-			double[] tempData = new double[dataX.Length];
-			for (int i = 0; i < dataX.Length; i++)
+			var tempData = new double[dataX.Length];
+			for (var i = 0; i < dataX.Length; i++)
 			{
 				tempData[i] = (dataX[i] - mwX) * (dataY[i] - mwY);
 			}
@@ -110,14 +112,13 @@ namespace csalgs.math.stat
 		/// <returns></returns>
 		public static Matrix GetPairCorrelationsMatrix(Matrix matrix)
 		{
-			int N = matrix.ColumnsCount;
-			int i, j;
+			var n = matrix.ColumnsCount;
 
-			Matrix result = new Matrix(N, N);
+			var result = new Matrix(n, n);
 
-			for (i = 0; i < N; i++)
+			for (var i = 0; i < n; i++)
 			{
-				for (j = 0; j < N; j++)
+				for (var j = 0; j < n; j++)
 				{
 					result[i,j] = GetCorrelationValue(matrix.GetColumnArray(i), matrix.GetColumnArray(j));
 				}

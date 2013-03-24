@@ -1,38 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public class Polynomial
 	{
 
-		private double[] data;
+		private double[] _data;
 
 		public int Size {
 			get
 			{
-				return data.Length;
+				return _data.Length;
 			}
 		}
 
 		public double[] Values {
 			get {
-				return data;
+				return _data;
 			}
 		}
 
 		public double this[int index] {
 			set {
-				data[index] = value;
+				_data[index] = value;
 			}
 			get {
-				return data[index];
+				return _data[index];
 			}
 		}
 
 		public Polynomial(int size) {
-			double[] ndata = new double[size];
+			var ndata = new double[size];
 			Init(ndata);
 		}
 
@@ -46,22 +46,23 @@ namespace csalgs.math
 
 		private void Init(double[] data)
 		{
-			this.data = data;
+			_data = data;
 		}
 		
 		public double GetValueForX(double x) {
 			double result = 0;
-			for (int i = 0, len = this.Size; i < len; i++) {
+			for (int i = 0, len = Size; i < len; i++) {
 				result += this[i] * Math.Pow(x, i);
 			}
 			return result;
 		}
 
 		public ISelection GetSelectionFromRange(double min, double max, int count) {
-			Range range = new Range(min, max);
+			var range = new Range(min, max);
 			ISelection result = new Selection();
 
-			for (double i = range.Min; i < range.Max; i += ((double)range.Length / (double)count)) {
+			for (double i = range.Min; i < range.Max; i += (range.Length / (double)count)) 
+			{
 				IVector v = new Vector(2);
 				v[0] = i;
 				v[1] = GetValueForX(i);

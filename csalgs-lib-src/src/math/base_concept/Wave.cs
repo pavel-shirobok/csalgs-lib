@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public interface IWave
 	{
@@ -28,26 +28,26 @@ namespace csalgs.math
 	}
 
 	public abstract class AbstractWave:IWave {
-		protected const double DOUBLE_PI = Math.PI * 2; 
-		private double frequency;
-		private double amplitude;
-		private double phase;
+		protected const double DoublePi = Math.PI * 2; 
+		private double _frequency;
+		private double _amplitude;
+		private double _phase;
 
-		protected void init(double freq, double ampl, double phase) {
-			frequency = freq;
-			amplitude = ampl;
-			this.phase = phase;
+		protected void Init(double freq, double ampl, double phase) {
+			_frequency = freq;
+			_amplitude = ampl;
+			_phase = phase;
 		}
 
 		public double Phase
 		{
 			get
 			{
-				return phase;
+				return _phase;
 			}
 			set
 			{
-				phase = value;
+				_phase = value;
 			}
 		}
 
@@ -55,11 +55,11 @@ namespace csalgs.math
 		{
 			get
 			{
-				return amplitude;
+				return _amplitude;
 			}
 			set
 			{
-				amplitude = value;
+				_amplitude = value;
 			}
 		}
 
@@ -67,11 +67,11 @@ namespace csalgs.math
 		{
 			get
 			{
-				return frequency;
+				return _frequency;
 			}
 			set
 			{
-				frequency = value;
+				_frequency = value;
 			}
 		}
 
@@ -81,24 +81,24 @@ namespace csalgs.math
 	public class SinWave : AbstractWave {
 
 		public SinWave(double freq, double ampl, double phase){
-			init(freq, ampl, phase);
+			Init(freq, ampl, phase);
 		}
 
 		public override double GetValue(double time)
 		{
-			return Amplitude * Math.Sin(time * DOUBLE_PI * Frequency + Phase);
+			return Amplitude * Math.Sin(time * DoublePi * Frequency + Phase);
 		}
 	}
 
 	public class CosWave : AbstractWave {
 		public CosWave(double freq, double ampl, double phase)
 		{
-			init(freq, ampl, phase);
+			Init(freq, ampl, phase);
 		}
 
 		public override double GetValue(double time)
 		{
-			return Amplitude * Math.Cos(time * DOUBLE_PI * Frequency + Phase);
+			return Amplitude * Math.Cos(time * DoublePi * Frequency + Phase);
 		}
 	}
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
     public partial class Matrix
     {
@@ -47,7 +45,7 @@ namespace csalgs.math
         /// <returns><see cref="csalgs.math.Matrix"/></returns>
         public static Matrix GetRandomMatrix(int rowsCount, int columnsCount, IRDL rdl)
         {
-            Matrix result = new Matrix(rowsCount, columnsCount);
+            var result = new Matrix(rowsCount, columnsCount);
 
             for (int i = 0; i < rowsCount; i++)
             {

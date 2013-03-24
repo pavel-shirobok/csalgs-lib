@@ -1,6 +1,8 @@
 ﻿using System;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public interface IVector {
 		double this[int index]{
@@ -24,53 +26,53 @@ namespace csalgs.math
 
 	public class Vector:IVector
 	{
-		private double[] values;
-		private int size = 0;
+		private double[] _values;
+		private int _size;
 		public Vector(double[] values) {
-			init(values);
+			Init(values);
 		}
 
 		public Vector(int size) {
-			double[] vv = new double[size];
-			init(vv);
+			var vv = new double[size];
+			Init(vv);
 		}
 
-		private void init(double[] values) {
-			this.values = values;
-			this.size = values.Length;
+		private void Init(double[] values) {
+			_values = values;
+			_size = values.Length;
 		}
 
 		public double this[int index]
 		{
 			get
 			{
-				return values[index];
+				return _values[index];
 			}
 			set
 			{
-				values[index] = value;
+				_values[index] = value;
 			}
 		}
 
 		public int Size
 		{
-			get { return size; }
+			get { return _size; }
 		}
 
 		public IVector Copy(int[] indexes)
 		{
-			int i = 0;
-			double[] copy = new double[indexes.Length];
+			int i;
+			var copy = new double[indexes.Length];
 			for (i = 0; i < indexes.Length; i++) {
-				copy[i] = values[indexes[i]];
+				copy[i] = _values[indexes[i]];
 			}
 			return new Vector(copy);
 		}
 
 		public IVector Copy()
 		{
-			double[] copy = new double[size];
-			Array.Copy(values, copy, size);
+			var copy = new double[_size];
+			Array.Copy(_values, copy, _size);
 			return new Vector(copy);
 		}
 	
@@ -78,8 +80,8 @@ namespace csalgs.math
 		public double[]  Values
 		{
 			get {
-				double[] copy = new double[size];
-				Array.Copy(values, copy, size);
+				var copy = new double[_size];
+				Array.Copy(_values, copy, _size);
 				return copy;
 			}
 		}

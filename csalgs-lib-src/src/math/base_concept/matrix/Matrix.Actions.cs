@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
     public partial class Matrix
     {
@@ -73,18 +73,17 @@ namespace csalgs.math
         /// <returns>new matrix equals this*m2</returns>
         public Matrix Multiply(Matrix m2)
         {
-            if (this.ColumnsCount != m2.RowsCount) throw new ArgumentException("Invalid matrix size for multiply");
+            if (ColumnsCount != m2.RowsCount) throw new ArgumentException("Invalid matrix size for multiply");
 
-            Matrix result = Matrix.GetMatrix(RowsCount, m2.ColumnsCount);
+            Matrix result = GetMatrix(RowsCount, m2.ColumnsCount);
 
-            double temp;
-            for (int i = 0; i < RowsCount; i++)
+	        for (var i = 0; i < RowsCount; i++)
             {
-                for (int j = 0; j < m2.ColumnsCount; j++)
+                for (var j = 0; j < m2.ColumnsCount; j++)
                 {
-                    temp = 0;
+                    double temp = 0;
 
-                    for (int k = 0; k < this.ColumnsCount; k++)
+                    for (var k = 0; k < ColumnsCount; k++)
                     {
                         temp += this[i, k] * m2[k, j];
                     }
@@ -103,7 +102,7 @@ namespace csalgs.math
         /// <returns>current matrix divided by number</returns>
         public Matrix Divide(double number)
         {
-            this.Multiply(1 / number);
+            Multiply(1 / number);
             return this;
         }
 
@@ -114,8 +113,8 @@ namespace csalgs.math
         /// <returns></returns>
         public double[] GetColumnArray(int index)
         {
-            double[] result = new double[rowsCount];
-            for (int i = 0; i < rowsCount; i++)
+            var result = new double[RowsCount];
+            for (int i = 0; i < RowsCount; i++)
             {
                 result[i] = this[i, index];
             }
@@ -130,9 +129,9 @@ namespace csalgs.math
         /// <returns></returns>
         public double[] GetRowArray(int index)
         {
-            double[] result = new double[columnsCount];
+            var result = new double[ColumnsCount];
 
-            for (int i = 0; i < columnsCount; i++)
+            for (var i = 0; i < ColumnsCount; i++)
             {
                 result[i] = this[index, i];
             }
@@ -148,14 +147,12 @@ namespace csalgs.math
         /// <param name="target">index of target position</param>
         public void ChangeRowsPosition(int index, int target)
         {
-            if (index < 0 || index > RowsCount - 1 || target < 0 || target > RowsCount - 1) throw new ArgumentOutOfRangeException("indexes in out of range");
+            if (index < 0 || index > RowsCount - 1 || target < 0 || target > RowsCount - 1) throw new ArgumentOutOfRangeException("index");
             if (index == target) return;
 
-            double temp = 0;
-
-            for (int j = 0, len = ColumnsCount; j < len; j++)
+	        for (int j = 0, len = ColumnsCount; j < len; j++)
             {
-                temp = this[index, j];
+                var temp = this[index, j];
                 this[index, j] = this[index, target];
                 this[index, target] = temp;
             }
@@ -168,13 +165,13 @@ namespace csalgs.math
         /// <param name="target">index of target position</param>
         public void ChangeColumnsPosition(int index, int target)
         {
-            if (index < 0 || index > ColumnsCount - 1 || target < 0 || target > ColumnsCount - 1) throw new ArgumentOutOfRangeException("indexes in out of range");
+            if (index < 0 || index > ColumnsCount - 1 || target < 0 || target > ColumnsCount - 1) throw new ArgumentOutOfRangeException("index" +
+                                                                                                                                        "");
             if (index == target) return;
-            double temp = 0;
 
-            for (int j = 0, len = RowsCount; j < len; j++)
+	        for (int j = 0, len = RowsCount; j < len; j++)
             {
-                temp = this[j, index];
+                var temp = this[j, index];
                 this[j, index] = this[target, index];
                 this[target, index] = temp;
             }

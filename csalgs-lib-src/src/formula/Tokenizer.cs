@@ -339,7 +339,7 @@ namespace csalgs.formula
 		private void OperationsCommit(char currentChar, String buffer, int index, List<Token>tokens){
 			TokenType tempTokenType;
 			
-			for (int i = 0; i < buffer.Length; i++)
+			for (var i = 0; i < buffer.Length; i++)
 			{
 				tempTokenType = GetOperationTokenTypeByValue(buffer[i].ToString());
 				if (tempTokenType == TokenType.UNKNOWN)

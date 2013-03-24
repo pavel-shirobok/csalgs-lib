@@ -1,30 +1,31 @@
-﻿using System;
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// System of linear equation
 	/// </summary>
 	public interface ISLE {
-		IVector Solve(Matrix A, Matrix B);
+		IVector Solve(Matrix a, Matrix b);
 	}
 
 	public class SLEGausse : ISLE {
 
-		public IVector Solve(Matrix _A, Matrix _B)
+		public IVector Solve(Matrix a, Matrix b)
 		{
-			int i = 0, j, k;
-			int N = (int)_A.RowsCount;
+			int i, j;
+			var n = a.RowsCount;
 
-			Matrix A = _A.Clone();
-			Matrix B = _B.Clone();
+			var A = a.Clone();
+			var B = b.Clone();
 
-			N--;
-			for (i = 0; i < N - 1; i++)
+			n--;
+			for (i = 0; i < n - 1; i++)
 			{
-				for (j = i + 1; j < N; j++)
+				for (j = i + 1; j < n; j++)
 				{
 					A[j, i] = -A[j, i] / A[i, i];
-					for (k = i + 1; k < N; k++)
+					for (var k = i + 1; k < n; k++)
 					{
 						A[j, k] = A[j, k] + A[j, i] * A[i, k];
 						B[j, 0] = B[j, 0] + A[j, i] * B[i, 0];
@@ -34,30 +35,29 @@ namespace csalgs.math
 				}
 			}
 
-			double[] X = new double[N];
+			var x = new double[n];
 
-			X[N] = B[N, 0] / A[N, N];
-			double h;
-			for (i = N - 1; i >= 0; i--)
+			x[n] = B[n, 0] / A[n, n];
+			for (i = n - 1; i >= 0; i--)
 			{
-				h = B[i, 0];
-				for (j = i + 1; j < N; j++)
+				var h = B[i, 0];
+				for (j = i + 1; j < n; j++)
 				{
-					h = h - X[j] * A[i, j];
+					h = h - x[j] * A[i, j];
 				}
 
-				X[i] = h / A[i, i];
+				x[i] = h / A[i, i];
 			}
 
-			return new Vector(X);
+			return new Vector(x);
 		}
 	}
 
 	public class SLEMatrix : ISLE {
 
-		public IVector Solve(Matrix A, Matrix B)
+		public IVector Solve(Matrix a, Matrix b)
 		{
-			return new Vector((!A * B).GetColumnArray(0));
+			return new Vector((!a * b).GetColumnArray(0));
 		}
 	}
 

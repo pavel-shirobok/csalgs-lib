@@ -1,38 +1,22 @@
 ﻿using System;
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Class presents of complex number and implements some methods to comfort working with complex numbers
 	/// </summary>
 	public class Complex
 	{
-		private double _R;
-		private double _Im;
-
 		/// <summary>
 		/// Real part of number
 		/// </summary>
-		public double R{
-			get {
-				return _R;
-			}
-			set {
-				_R = value;
-			}
-		}
+		public double R { get; set; }
 
 		/// <summary>
 		/// Imaginary part of part
 		/// </summary>
-		public double Im {
-			get {
-				return _Im;
-			}
-			set {
-				_Im = value;
-			}
-
-		}
+		public double Im { get; set; }
 
 		/// <summary>
 		/// Constructor Real = <paramref name="r"/> Imaginary = 1

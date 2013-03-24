@@ -1,27 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
     public partial class Matrix
     {
         /// <summary>
         /// Raw 2D matrix
         /// </summary>
-        private double[,] rawData;
+        private double[,] _rawData;
 
-        /// <summary>
-        /// Rows count
-        /// </summary>
-        private int rowsCount;
-
-        /// <summary>
-        /// Columns count
-        /// </summary>
-        private int columnsCount;
-
-        /// <summary>
+	    /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="rowCount">Rows count</param>
@@ -29,7 +17,7 @@ namespace csalgs.math
         public Matrix(int rowCount, int columnCount){
             AssertInitSizeCount(rowCount, columnCount);
 
-            initStartMatrix(rowCount, columnCount);
+            InitStartMatrix(rowCount, columnCount);
         }
 
         /// <summary>
@@ -37,18 +25,18 @@ namespace csalgs.math
         /// </summary>
         /// <param name="rowCount">Rows count</param>
         /// <param name="columnCount">Columns count</param>
-        private void initStartMatrix(int rowCount, int columnCount)
+        private void InitStartMatrix(int rowCount, int columnCount)
         {
-            this.rowsCount = rowCount;
-            this.columnsCount = columnCount;
+            RowsCount = rowCount;
+            ColumnsCount = columnCount;
 
-            rawData = new double[rowCount, columnCount];
+            _rawData = new double[rowCount, columnCount];
 
-            for (int i = 0; i < rowCount; i++)
+            for (var i = 0; i < rowCount; i++)
             {
-                for (int j = 0; j < columnCount; j++)
+                for (var j = 0; j < columnCount; j++)
                 {
-                    rawData[i, j] = 0;
+                    _rawData[i, j] = 0;
                 }
             }
         }
@@ -64,44 +52,36 @@ namespace csalgs.math
 
             get
             {
-                return rawData[row, column];
+                return _rawData[row, column];
             }
 
             set
             {
-                rawData[row, column] = value;
+                _rawData[row, column] = value;
             }
         }
 
-        /// <summary>
-        /// Rows count (read-only)
-        /// </summary>
-        public int RowsCount {
-            get {
-                return this.rowsCount;
-            }
-        }
+	    /// <summary>
+	    /// Rows count (read-only)
+	    /// </summary>
+	    public int RowsCount { get; private set; }
 
-        /// <summary>
-        /// Columns count (read-only)
-        /// </summary>
-        public int ColumnsCount {
-            get {
-                return this.columnsCount;
-            }
-        }
+	    /// <summary>
+	    /// Columns count (read-only)
+	    /// </summary>
+	    public int ColumnsCount { get; private set; }
 
-        /// <summary>
+	    /// <summary>
         /// Clone current matrix
         /// </summary>
         /// <returns>clone</returns>
         public Matrix Clone()
         {
-            Matrix clone = Matrix.GetMatrix(rowsCount, columnsCount);
+            Matrix clone = GetMatrix(RowsCount, ColumnsCount);
 
-            for (int i = 0; i < rowsCount; i++)
+            for (int i = 0; i < RowsCount; i++)
             {
-                for (int j = 0; j < columnsCount; j++)
+                for (int j = 0; j < ColumnsCount; j++)
                 {
                     clone[i, j] = this[i, j];
                 }

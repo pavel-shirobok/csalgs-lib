@@ -1,52 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.sorting
+// ReSharper restore CheckNamespace
 {
     public class BubbleSort<T>:AbstractSortMethod<T>
     {
-        private T current;
-        private int lightIndex;
+        private T _current;
+        private int _lightIndex;
 
-        protected override void reset()
+        protected override void Reset()
         {
-            base.reset();
-            lightIndex = -1;
+            base.Reset();
+            _lightIndex = -1;
         }
 
         public override void NextStep()
         {
-            if (lightIndex == -1) {
-                lightIndex = selection.Length;
-                currentPrimaryItemIndex = 0;
-                current = selection[0];
+            if (_lightIndex == -1) {
+                _lightIndex = Selection.Length;
+                CurrentPrimaryItemIndex = 0;
+                _current = Selection[0];
             }
 
-            current = selection[currentPrimaryItemIndex];
-            increaseItemIndex();
+            _current = Selection[CurrentPrimaryItemIndex];
+            IncreaseItemIndex();
 
-            if(currentPrimaryItemIndex == lightIndex){
-                currentPrimaryItemIndex = 0;
-                current = selection[currentPrimaryItemIndex];
-                increaseItemIndex();
-                lightIndex--;
+            if(CurrentPrimaryItemIndex == _lightIndex){
+                CurrentPrimaryItemIndex = 0;
+                _current = Selection[CurrentPrimaryItemIndex];
+                IncreaseItemIndex();
+                _lightIndex--;
             }
             
-            T next = selection[currentPrimaryItemIndex];
+            T next = Selection[CurrentPrimaryItemIndex];
 
-            if (comparison(current, next) == 1) {
-                currentSecondaryItemIndex = currentPrimaryItemIndex - 1;
-                selection[currentPrimaryItemIndex] = current;
-                selection[currentSecondaryItemIndex] = next;
+            if (Comparison(_current, next) == 1) {
+                CurrentSecondaryItemIndex = CurrentPrimaryItemIndex - 1;
+                Selection[CurrentPrimaryItemIndex] = _current;
+                Selection[CurrentSecondaryItemIndex] = next;
             }
 
-            currentStepIndex++;
+            CurrentStepIndex++;
         }
 
         public override bool Finished
         {
-            get { return lightIndex==1; }
+            get { return _lightIndex==1; }
         }
     }
 }

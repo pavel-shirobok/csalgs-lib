@@ -208,10 +208,10 @@ namespace csalgsDevelop
             method.Setup(selection);
             method.SetupComparable(Comparisons.DOUBLE_ASC);
 
-            drawSortingChart(method, selection);
+            DrawSortingChart(method, selection);
         }
 
-        private void drawSortingChart(ISortMethod<double> method, double[] selection)
+        private void DrawSortingChart(ISortMethod<double> method, double[] selection)
         {
             sortChart.Series[0].Points.Clear();
             for(int i =0; i<selection.Length; i++){
@@ -228,7 +228,7 @@ namespace csalgsDevelop
             
         }
 
-        private void onSortTimerTick(object sender, EventArgs e)
+        private void OnSortTimerTick(object sender, EventArgs e)
         {
             if (method.Finished) {
                 _sortingTimer.Stop();
@@ -236,7 +236,7 @@ namespace csalgsDevelop
             }
             
             method.NextStep();
-            drawSortingChart(method, selection);
+            DrawSortingChart(method, selection);
         }
 
         #endregion

@@ -31,6 +31,7 @@ namespace csalgs.sorting
         public override void Setup(T[] selection)
         {
             base.Setup(selection);
+
         }
         
         public override void NextStep()

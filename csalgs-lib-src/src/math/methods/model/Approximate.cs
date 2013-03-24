@@ -1,41 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public interface IApproximator {
-		Polynomial Approximate(ISelection XY, int order);	
+		Polynomial Approximate(ISelection xy, int order);	
 	}
 
 	public class LeastSquareMethod:IApproximator{
 
-		public Polynomial Approximate(ISelection XY, int order){
-			Matrix A = new Matrix(order, order);
-			Matrix B = new Matrix(order, 1);
+		public Polynomial Approximate(ISelection xy, int order){
+			var a = new Matrix(order, order);
+			var b = new Matrix(order, 1);
 
-			for (int i = 0; i < order; i++)
+			for (var i = 0; i < order; i++)
 			{
-				for (int j = 0; j < order; j++)
+				for (var j = 0; j < order; j++)
 				{
-					for (int k = 0; k < XY.Size; k++)
+					for (var k = 0; k < xy.Size; k++)
 					{
-						
-						A[i, j] += Math.Pow(XY[k][0], i) * Math.Pow(XY[k][0], j);
+						a[i, j] += Math.Pow(xy[k][0], i) * Math.Pow(xy[k][0], j);
 					}
 				}
 			}
 
-			for (int i = 0; i < order; i++) {
-				for(int k=0; k < XY.Size; k++){
-					B[i, 0] += Math.Pow(XY[k][0], i) * XY[k][1];
+			for (var i = 0; i < order; i++) {
+				for(var k=0; k < xy.Size; k++){
+					b[i, 0] += Math.Pow(xy[k][0], i) * xy[k][1];
 				}
 			}
 
 			ISLE sle = new SLEGausse();
-			return new Polynomial(sle.Solve(A, B));
-			//RealMatrix resM = A.GetInverse().Multiply(B);// !A * B;
-			//return new Polynomial(resM.GetColumnArray(0));
+			return new Polynomial(sle.Solve(a, b));
 		}
 
 	}

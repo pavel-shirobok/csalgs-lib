@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.sorting
+// ReSharper restore CheckNamespace
 {
     public interface ISortMethod<T>{
         void Setup(T[] selection);
@@ -34,18 +34,20 @@ namespace csalgs.sorting
     }
 
     public sealed class Comparisons {
-        public static Comparison<Double> DOUBLE_ASC = (double o1, double o2) =>
-        {
-            if (o1 > o2) return 1;
-            if (o1 < o2) return -1;
-            return 0;
-        };
+		// ReSharper disable InconsistentNaming
+        public static Comparison<Double> DOUBLE_ASC = (o1, o2) =>
+		// ReSharper restore InconsistentNaming
+	        {
+		        if (o1 > o2) return 1;
+		        return o1 < o2 ? -1 : 0;
+	        };
 
-        public static Comparison<Double> DOUBLE_DESC = (double o1, double o2) =>
+		// ReSharper disable InconsistentNaming
+        public static Comparison<Double> DOUBLE_DESC = (o1, o2) =>
+		// ReSharper restore InconsistentNaming
         {
             if (o1 > o2) return -1;
-            if (o1 < o2) return 1;
-            return 0;
+            return o1 < o2 ? 1 : 0;
         };
     }
 }

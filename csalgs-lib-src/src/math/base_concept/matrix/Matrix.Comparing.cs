@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
     public partial class Matrix
     {
@@ -17,9 +15,9 @@ namespace csalgs.math
 
             if (!IsSizeEqual(m)) return false;
 
-            for (int i = 0; i < m.rowsCount; i++)
+            for (int i = 0; i < m.RowsCount; i++)
             {
-                for (int j = 0; j < m.columnsCount; j++)
+                for (int j = 0; j < m.ColumnsCount; j++)
                 {
                     if (this[i, j] != m[i, j]) return false;
                 }
@@ -34,9 +32,9 @@ namespace csalgs.math
         /// <returns>true if current matrix is identity</returns>
         public bool IsIdentityMatrix()
         {
-            for (int i = 0; i < rowsCount; i++)
+            for (int i = 0; i < RowsCount; i++)
             {
-                for (int j = 0; j < columnsCount; j++)
+                for (int j = 0; j < ColumnsCount; j++)
                 {
 
                     if (i == j)
@@ -60,7 +58,7 @@ namespace csalgs.math
         /// <returns></returns>
         public bool IsSizeEqual(Matrix matrix)
         {
-            return matrix.rowsCount == rowsCount && matrix.columnsCount == columnsCount;
+            return matrix.RowsCount == RowsCount && matrix.ColumnsCount == ColumnsCount;
         }
     }
 }

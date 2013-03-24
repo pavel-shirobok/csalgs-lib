@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
     public partial class Matrix
     {
@@ -12,13 +12,13 @@ namespace csalgs.math
                 throw new ArgumentException(
                     String.Format(
                         "matrix not size-equal current[{0}{1}], received[{2}{3}]",
-                            rowsCount, columnsCount, matrix.rowsCount, matrix.columnsCount
+                            RowsCount, ColumnsCount, matrix.RowsCount, matrix.ColumnsCount
                             )
                 );
             }
         }
 
-        private void AssertInitSizeCount(int rowCount, int columnCount) {
+        private static void AssertInitSizeCount(int rowCount, int columnCount) {
             if (rowCount <= 0) {
                 throw new ArgumentException("Row count must be more than zero");
             }
@@ -32,9 +32,9 @@ namespace csalgs.math
 			AssertNonNull(matrix, "Matrix must be non-null");
 		}
 
-		private void AssertNonNull(Matrix matrix, String assert_text){
+		private void AssertNonNull(Matrix matrix, String assertText){
 			if(matrix == null){
-				throw new ArgumentException(assert_text);
+				throw new ArgumentException(assertText);
 			}
 		}
 

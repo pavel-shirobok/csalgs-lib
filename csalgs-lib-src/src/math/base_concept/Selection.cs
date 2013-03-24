@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections;
+﻿using System.Collections.Generic;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public interface ISelection:IEnumerable<IVector> {
 		IVector this[int index]
@@ -15,7 +14,7 @@ namespace csalgs.math
 		IVector Add(IVector vector);
 		IVector Remove(int index);
 
-		void Swap(int index_first, int index_second);
+		void Swap(int indexFirst, int indexSecond);
 
 		ISelection Copy();
 		ISelection Copy(int[] indexes);
@@ -30,16 +29,16 @@ namespace csalgs.math
 
 	public class Selection:ISelection
 	{
-		private SelectionComparator comparator;
+		private readonly SelectionComparator _comparator;
 
-		private List<IVector> selection;
+		private readonly List<IVector> _selection;
 		public Selection() {
-			selection = new List<IVector>();
-			comparator = new SelectionComparator();
+			_selection = new List<IVector>();
+			_comparator = new SelectionComparator();
 		}
 
 		public Selection(IVector[] vectors) {
-			selection = new List<IVector>();
+			_selection = new List<IVector>();
 			for (int i = 0, len = vectors.Length; i < len; i++) {
 				Add(vectors[i]);
 			}
@@ -48,40 +47,40 @@ namespace csalgs.math
 
 		public IVector this[int index]
 		{
-			get { return selection[index]; }
+			get { return _selection[index]; }
 			set {
-				selection[index] = value;
+				_selection[index] = value;
 			}
 		}
 
 		public IVector Add(IVector vector)
 		{
-			selection.Add(vector);
+			_selection.Add(vector);
 			return vector;
 		}
 
 		public IVector Remove(int index)
 		{
-			IVector vector = selection[index];
-			selection.RemoveAt(index);
+			IVector vector = _selection[index];
+			_selection.RemoveAt(index);
 			return vector;
 		}
 
-		public void Swap(int index_first, int index_second)
+		public void Swap(int indexFirst, int indexSecond)
 		{
-			IVector first = selection[index_first];
-			IVector second = selection[index_second];
+			IVector first = _selection[indexFirst];
+			IVector second = _selection[indexSecond];
 
-			selection[index_first] = second;
-			selection[index_second] = first;
+			_selection[indexFirst] = second;
+			_selection[indexSecond] = first;
 		}
 
 		public ISelection Copy()
 		{
-			IVector[] result = new Vector[selection.Count];
+			var result = new Vector[_selection.Count];
 
-			for (int i = 0, len = selection.Count; i < len; i++) {
-				result[i] = selection[i].Copy();
+			for (int i = 0, len = _selection.Count; i < len; i++) {
+				result[i] = (Vector) _selection[i].Copy();
 			}
 
 			return new Selection(result);
@@ -89,7 +88,7 @@ namespace csalgs.math
 
 		public ISelection Copy(int[] indexes)
 		{
-			Selection result = new Selection();
+			var result = new Selection();
 			for (int i = 0, len = Size; i < len; i++) {
 				result.Add(this[i].Copy(indexes));
 			}
@@ -98,33 +97,32 @@ namespace csalgs.math
 
 		public void SortBy(int index)
 		{
-			comparator.index = index;
-			selection.Sort(comparator);
+			_comparator.Index = index;
+			_selection.Sort(_comparator);
 		}
 
 		public int Size
 		{
-			get { return selection.Count; }
+			get { return _selection.Count; }
 		}
 
 		public IEnumerator<IVector> GetEnumerator()
 		{
-			return selection.GetEnumerator();
+			return _selection.GetEnumerator();
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return selection.GetEnumerator();
+			return _selection.GetEnumerator();
 		}
 	}
 
 	class SelectionComparator : IComparer<IVector> {
-		public int index = 0;
+		public int Index = 0;
 		public int Compare(IVector x, IVector y)
 		{
-			if (x[index] > y[index]) return -1;
-			if (x[index] < y[index]) return 1;
-			return 0;
+			if (x[Index] > y[Index]) return -1;
+			return x[Index] < y[Index] ? 1 : 0;
 		}
 	}
 }

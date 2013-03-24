@@ -1,6 +1,6 @@
-﻿using System;
-
+﻿// ReSharper disable CheckNamespace
 namespace csalgs.math.stat
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Probability density value - оценка плотности вероятности
@@ -12,42 +12,39 @@ namespace csalgs.math.stat
 
 	public class RosenblattParzenAssessment : IPDV
 	{
-		private Matrix data;
-		private IKernel kernel;
-		private double[] blurs;
+		private Matrix _data;
+		private IKernel _kernel;
+		private double[] _blurs;
 
 		public RosenblattParzenAssessment(Matrix data, IKernel kernel, double[] blurs) {
-			init(data, kernel, blurs);
+			Init(data, kernel, blurs);
 		}
 
 		public RosenblattParzenAssessment(Matrix data, IKernel kernel, IVector blurs) {
-			init(data, kernel, blurs.Values);
+			Init(data, kernel, blurs.Values);
 		}
 
-		private void init(Matrix data, IKernel kernel, double[] h) {
+		private void Init(Matrix data, IKernel kernel, double[] h) {
 			//TODO проверки на совместимость данных!
-			this.data = data;
-			this.kernel = kernel;
-			blurs = h;
+			_data = data;
+			_kernel = kernel;
+			_blurs = h;
 		}
 
 		public double Calculate(double[] vector) {
-			int i, j;
 			double resultSumm = 0;
-			double resultMult = 0;
-			double temp;
-			for (i = 0; i < data.RowsCount; i++)
+			for (var i = 0; i < _data.RowsCount; i++)
 			{
-				resultMult = 1;
-				for (j = 0; j < data.ColumnsCount; j++)
+				double resultMult = 1;
+				for (var j = 0; j < _data.ColumnsCount; j++)
 				{
-					temp = (1.0 / blurs[j]) * kernel.Calculate((vector[j] - data[i,j]) / blurs[j]);
+					var temp = (1.0 / _blurs[j]) * _kernel.Calculate((vector[j] - _data[i,j]) / _blurs[j]);
 					resultMult *= (temp == 0 ? 1 : temp);
 				}
 				resultSumm += resultMult;
 			}
 
-			return resultSumm / data.RowsCount;
+			return resultSumm / _data.RowsCount;
 		}
 
 		public double Calculate(IVector vector) {

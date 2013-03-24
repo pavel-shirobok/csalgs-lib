@@ -1,5 +1,7 @@
 ﻿using System;
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	/// <summary>
 	/// Interface represents of Random Distribution Law
@@ -63,12 +65,12 @@ namespace csalgs.math
 		/// <summary>
 		/// <see cref="System.Random"/> core of IRDL
 		/// </summary>
-		protected Random rand_source;
+		protected Random RandSource;
 		
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public AbstractRDL() {
+		protected AbstractRDL() {
 			Seed();
 		}
 
@@ -77,9 +79,8 @@ namespace csalgs.math
 		/// </summary>
 		public void Seed()
 		{
-			int seed = System.DateTime.Now.Millisecond;
+			var seed = DateTime.Now.Millisecond;
 			Seed(seed);
-			
 		}
 
 		/// <summary>
@@ -88,7 +89,7 @@ namespace csalgs.math
 		/// <param name="seed">seed, as example current time</param>
 		public void Seed(int seed)
 		{
-			rand_source = new Random(seed);
+			RandSource = new Random(seed);
 		}
 
 		/// <summary>
@@ -96,7 +97,7 @@ namespace csalgs.math
 		/// </summary>
 		public Random Source {
 			get {
-				return rand_source;
+				return RandSource;
 			}
 		}
 
@@ -155,7 +156,7 @@ namespace csalgs.math
 		/// <returns>random number in range from Range.min to Range.max</returns>
 		public override double Get(Range range)
 		{
-			return rand_source.NextDouble() * range.Length + range.Min;
+			return RandSource.NextDouble() * range.Length + range.Min;
 		}
 	}
 	
@@ -178,20 +179,20 @@ namespace csalgs.math
 		/// <returns>random number in range from Range.min to Range.max</returns>
 		public override double Get(Range range)
 		{
-			double s = -1, x = 0, y = 0, z1;
+			double s = -1, x = 0;
 
 			while (s <= 0 || s > 1)
 			{
-				x = -1 + rand_source.NextDouble() * 2;
-				y = -1 + rand_source.NextDouble() * 2;
+				x = -1 + RandSource.NextDouble() * 2;
+				var y = -1 + RandSource.NextDouble() * 2;
 
 				s = x * x + y * y;
 			}
 
-			z1 = x * Math.Sqrt((-2 * Math.Log(s)) / s);
+			var z1 = x * Math.Sqrt((-2 * Math.Log(s)) / s);
 
-			double norm_z = 1/2 + z1 / 2;
-			return range.Length * norm_z + range.Min;
+			var normZ = 1/2 + z1 / 2;
+			return range.Length * normZ + range.Min;
 		}
 	}
 }

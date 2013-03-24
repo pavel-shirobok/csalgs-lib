@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using csalgs.math;
 
+// ReSharper disable CheckNamespace
 namespace csalgs.math
+// ReSharper restore CheckNamespace
 {
 	public class FourierUtils {
 		public static IWave GetWaveFromComplex(Complex complex, double freq, int numberOfComponents)
 		{
-			double phase = Math.Atan(complex.Im / complex.R);
-			double amplitude = (1.0 / (double)numberOfComponents) * Math.Sqrt(Math.Pow(complex.R, 2) + Math.Pow(complex.Im, 2));
+			var phase = Math.Atan(complex.Im / complex.R);
+			var amplitude = (1.0 / numberOfComponents) * Math.Sqrt(Math.Pow(complex.R, 2) + Math.Pow(complex.Im, 2));
 
 			return new CosWave(freq, amplitude, phase);
 		}
@@ -16,9 +16,9 @@ namespace csalgs.math
 		public static Complex[] GetComplexArrayFrom1DSelection(ISelection selection) {
 			int size = selection.Size;
 
-			Complex[] result = new Complex[size];
-			int i = 0;
-			foreach(IVector v in selection){
+			var result = new Complex[size];
+			var i = 0;
+			foreach(var v in selection){
 				result[i] = new Complex(v[0], 0);
 				i++;
 			}
@@ -30,9 +30,9 @@ namespace csalgs.math
 		{
 			int size = selection.Size;
 
-			Complex[] result = new Complex[size];
+			var result = new Complex[size];
 			int i = 0;
-			foreach (IVector v in selection)
+			foreach (var v in selection)
 			{
 				result[i] = new Complex(v[0], v[1]);
 				i++;
@@ -80,50 +80,48 @@ namespace csalgs.math
 				return selection;
 			}
 
-			Complex w = new Complex(1, 0);
-			Complex wn = Complex.FromExp(((2 * Math.PI) / (double)n) * (reverse ? -1 : 1));
+			var w = new Complex(1, 0);
+			var wn = Complex.FromExp(((2 * Math.PI) / n) * (reverse ? -1 : 1));
 
-			int half_length = n / 2;
+			int halfLength = n / 2;
 
-			Complex[] a0 = new Complex[half_length];
-			Complex[] a1 = new Complex[half_length];
+			var a0 = new Complex[halfLength];
+			var a1 = new Complex[halfLength];
 
-			int last0_index = 0;
-			int last1_index = 0;
+			var last0Index = 0;
+			var last1Index = 0;
 
 			for (int i = 0; i < n; i++)
 			{
 				if ((i & 1) == 1)
 				{
-					a1[last1_index] = selection[i].Clone();
-					last1_index++;
+					a1[last1Index] = selection[i].Clone();
+					last1Index++;
 				}
 				else
 				{
-					a0[last0_index] = selection[i].Clone();
-					last0_index++;
+					a0[last0Index] = selection[i].Clone();
+					last0Index++;
 				}
 			}
 
-			Complex[] y0 = Transform(a0, reverse);
-			Complex[] y1 = Transform(a1, reverse);
+			var y0 = Transform(a0, reverse);
+			var y1 = Transform(a1, reverse);
 
-			Complex[] y = new Complex[n];
+			var y = new Complex[n];
 
 			for (int i = 0; i < n; i++)
 			{
 				y[i] = new Complex(1, 0);
 			}
 
-			Complex y0k;
-			Complex y1k;
-			Complex w0k;
-			for (int k = 0; k < half_length; k++)
+			for (int k = 0; k < halfLength; k++)
 			{
-				y0k = y0[k];
-				y1k = y1[k];
-
-				w0k = w * y1k;
+				// ReSharper disable InconsistentNaming
+				var y0k = y0[k];
+				var y1k = y1[k];
+				var w0k = w * y1k;
+				// ReSharper restore InconsistentNaming
 				y[k] = y0k + w0k;
 				y[k + n / 2] = y0k - w0k;
 				if (reverse) {
