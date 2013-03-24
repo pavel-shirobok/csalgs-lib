@@ -40,6 +40,10 @@
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.sortingPage = new System.Windows.Forms.TabPage();
 			this.sortChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.pauseSorting = new System.Windows.Forms.Button();
@@ -53,8 +57,9 @@
 			this.startApproximateButton = new System.Windows.Forms.Button();
 			this.approximateChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this._sortingTimer = new System.Windows.Forms.Timer(this.components);
 			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this._sortingTimer = new System.Windows.Forms.Timer(this.components);
+			this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.sortingPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.sortChart)).BeginInit();
 			this.tabPage1.SuspendLayout();
@@ -64,6 +69,8 @@
 			this.tabPage2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.approximateChart)).BeginInit();
 			this.tabControl1.SuspendLayout();
+			this.tabPage3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// sortingPage
@@ -228,13 +235,9 @@
 			this.tabControl1.Size = new System.Drawing.Size(862, 540);
 			this.tabControl1.TabIndex = 0;
 			// 
-			// _sortingTimer
-			// 
-			this._sortingTimer.Interval = 10;
-			this._sortingTimer.Tick += new System.EventHandler(this.OnSortTimerTick);
-			// 
 			// tabPage3
 			// 
+			this.tabPage3.Controls.Add(this.chart1);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -242,6 +245,33 @@
 			this.tabPage3.TabIndex = 3;
 			this.tabPage3.Text = "tabPage3";
 			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// _sortingTimer
+			// 
+			this._sortingTimer.Interval = 10;
+			this._sortingTimer.Tick += new System.EventHandler(this.OnSortTimerTick);
+			// 
+			// chart1
+			// 
+			chartArea6.Name = "ChartArea1";
+			this.chart1.ChartAreas.Add(chartArea6);
+			legend1.Name = "Legend1";
+			this.chart1.Legends.Add(legend1);
+			this.chart1.Location = new System.Drawing.Point(6, 6);
+			this.chart1.Name = "chart1";
+			series7.ChartArea = "ChartArea1";
+			series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series7.Legend = "Legend1";
+			series7.Name = "Series2";
+			series8.ChartArea = "ChartArea1";
+			series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series8.Legend = "Legend1";
+			series8.Name = "Series3";
+			this.chart1.Series.Add(series7);
+			this.chart1.Series.Add(series8);
+			this.chart1.Size = new System.Drawing.Size(842, 352);
+			this.chart1.TabIndex = 0;
+			this.chart1.Text = "chart1";
 			// 
 			// Form1
 			// 
@@ -261,6 +291,8 @@
 			this.tabPage2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.approximateChart)).EndInit();
 			this.tabControl1.ResumeLayout(false);
+			this.tabPage3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -282,6 +314,7 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart sortChart;
         private System.Windows.Forms.Timer _sortingTimer;
 		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
 
     }
 }

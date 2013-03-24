@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using csalgs.formats;
 using csalgs.math;
 using csalgs.sorting;
 
@@ -20,6 +22,19 @@ namespace csalgsDevelop
 
 			Range ra = new Range(1, 2);
             sortChart.Series.Add("12");
+
+			Stream stream = File.Open("test.agr", FileMode.Open);
+
+
+
+			var reader = new AgrFormatReader();
+			var list = reader.Read(stream);
+
+			foreach (var item in list)
+			{
+				Console.WriteLine("{0}", item.PatientName);
+			}
+
 			//ra.
 		}
 
